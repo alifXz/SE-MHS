@@ -39,7 +39,7 @@ class AppTextStyles{
 
   static const TextStyle linkText = TextStyle(
     fontSize: 14,
-    fontWeight: FontWeight.w600
+    fontWeight: FontWeight.w600,
     color: AppColors.text1,
   );
 
