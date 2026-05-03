@@ -44,12 +44,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
       SnackBar(content: Text('Email has been Registered: ${_emailController.text}')),
   
     );
+ 
+    if(_passwordController.text != _confirmPasswordController.text){
+      ScaffoldMessenger.of(context).showSnackBar(...);
+      return;
 
+    }
+
+    void _goToLogin(){
+      Navigator.pop(context);
+    }
 
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 40),
+              const _AuthLogo(),
+              const SizedBox(height: 28),
+              Text('Create Account', style: AppTextStyles.heading),
+              const SizedBox(height: 8),
+              Text(
+                'Sign up to get started. ',
+                style: AppTextStyles.subtitle,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
+              CustomTextField(
+                
+              )
+            ]
+          ),
+        ),
+        ),
+    );
   }
+
+
+
+
 }
