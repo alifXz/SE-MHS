@@ -46,14 +46,14 @@ class CustomTextField extends StatelessWidget {
         ),
       ],
     );
-     OutlineInputBorder _border({Color color = Colors.transparent, double width = 0}) {
-      return OutlineInputBorder(
-        borderRadius:  BorderRadius.circular(30),
-        borderSide: BorderSlide(color: color, width: width),
-
-      );
+     
      }
 
+  OutlineInputBorder _border({Color color = Colors.transparent, double width = 0}) {
+      return OutlineInputBorder(
+        borderRadius:  BorderRadius.circular(30),
+        borderSide: BorderSide(color: color, width: width),
 
+      );
   }
 }
