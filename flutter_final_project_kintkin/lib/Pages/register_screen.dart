@@ -1,6 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text.dart';
+import '../widgets/custom_text_field.dart';
+import '../widgets/auth_logo.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -10,17 +13,19 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-
+  final _ageController = TextEditingController();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  
   bool _isLoading = false;
 
   @override
   void dispose(){
     _nameController.dispose();
     _emailController.dispose();
+    _ageController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
@@ -45,12 +50,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   
     );
  
-    if(_passwordController.text != _confirmPasswordController.text){
-      ScaffoldMessenger.of(context).showSnackBar(...);
-      return;
-
-    }
-
+    setState(() => _isLoading = true);
+    await Future.delayed(const Duration(seconds: 1));
+    if(!mounted)return;
+    setState(() )
     void _goToLogin(){
       Navigator.pop(context);
     }
@@ -68,7 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 40),
-              const _AuthLogo(),
+              const AuthLogo(),
               const SizedBox(height: 28),
               Text('Create Account', style: AppTextStyles.heading),
               const SizedBox(height: 8),
@@ -78,17 +81,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
+              CustomTextField(label: 'Name', 
+              hintText: 'Name', 
+              icon: Icons.person_outline,
+              controller: _nameController,
+              keyboardType:TextInputType.name
+              ) ,
+          
+              const SizedBox(),
               CustomTextField(
-                
-              )
-            ]
+                label:'Age' ,
+                hintText: '25', 
+                icon: Icons.numbers_outlined,
+                controller: _ageController,
+                keyboardType: TextInputType.number,
+                ),
+
+              const SizedBox(height: 32),
+              CustomTextField(
+                label: 'Email Address',
+                hintText: 'aaa@gmail.com',
+                icon: Icons.email_outlined,
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+              ),
+              
+              const SizedBox(height: 32),
+              CustomTextField(
+              label:'Password' , 
+              hintText: '.....', 
+              icon: Icons.lock_outlined,
+              obscureText: true,
+              ),
+              const SizedBox(height: 32),
+              PrimaryButton(
+
+              ),
+            ],
           ),
         ),
         ),
     );
   }
-
-
-
-
 }
