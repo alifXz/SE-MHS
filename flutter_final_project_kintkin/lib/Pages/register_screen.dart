@@ -52,8 +52,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
  
     setState(() => _isLoading = true);
     await Future.delayed(const Duration(seconds: 1));
+
     if(!mounted)return;
-    setState(() )
+
+    setState(()=> _isLoading = false);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Email has been registered: ${_emailController.text}')),
+    );
+
+    
     void _goToLogin(){
       Navigator.pop(context);
     }
