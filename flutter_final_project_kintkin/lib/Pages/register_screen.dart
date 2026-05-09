@@ -97,6 +97,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 style: AppTextStyles.subtitle,
                 textAlign: TextAlign.center,
               ),
+              
               const SizedBox(height: 32),
               CustomTextField(label: 'Name', 
               hintText: 'Name', 
@@ -104,17 +105,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
               controller: _nameController,
               keyboardType:TextInputType.name
               ) ,
-          
-              const SizedBox(),
-              CustomTextField(
+            const SizedBox(),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: CustomTextField(
                 label:'Age' ,
                 hintText: 'age', 
                 icon: Icons.numbers_outlined,
                 controller: _ageController,
                 keyboardType: TextInputType.number,
                 ),
-
+                ),
               const SizedBox(height: 32),
+              Expanded(child: 
               CustomTextField(
                 label: 'Phone Number',
                 hintText: '+62 812 9938 9987',
@@ -122,7 +126,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: _phoneNumberController,
                 keyboardType: TextInputType.phone,
               ),
-
+              ),
+              ],
+            ),
               const SizedBox(height: 32),
               CustomTextField(
                 label: 'Email Address',
