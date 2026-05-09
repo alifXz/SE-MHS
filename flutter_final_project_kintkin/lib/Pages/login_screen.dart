@@ -1,11 +1,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_final_project_kintkin/Pages/home_screen.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/auth_logo.dart';
 import '../widgets/primary_button.dart';
 import '../widgets/LoginText.dart';
+import '../pages/home_screen.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -64,7 +67,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   }
 
-  
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 40),
+              const SizedBox(height: 1000),
               const AuthLogo(),
               const SizedBox(height: 28),
               Text('Login', style: AppTextStyles.heading),
@@ -109,10 +111,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: _handleLogin,
                 isLoading: _isLoading,
               ),
+              const SizedBox(height: 24),
+              LoginText(onTap: _goToHome)
             ],
           ),
         ),
         ),
+    );
+  }
+
+  void _goToHome() {
+    Navigator.push(context,
+      MaterialPageRoute(builder: (_) => const homeScreen()),
     );
   }
 }
