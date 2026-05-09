@@ -7,7 +7,8 @@ import '../widgets/custom_text_field.dart';
 import '../widgets/auth_logo.dart';
 import '../widgets/primary_button.dart';
 import '../widgets/LoginText.dart';
-import '../pages/home_screen.dart';
+import '../Pages/home_screen.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

@@ -1,11 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+
 class homeScreen extends StatelessWidget {
   const homeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {   
     return CarouselSlider(
   options: CarouselOptions(height: 400.0),
   items: [1,2,3,4,5].map((i) {
