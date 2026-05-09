@@ -25,10 +25,23 @@ class PrimaryButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.white,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadiusGeometry.circular(30),
+          ),
         ),
-         child: child
+         child: isLoading ? const SizedBox(
+          width: 22,
+          height: 22,
+          child: CircularProgressIndicator(
+            color:Colors.white,
+            strokeWidth: 2,
+          ),
          )
-    )
+         :Text(text,style: AppTextStyles.button),
+         ),
+    );
   }
 }

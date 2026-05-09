@@ -4,7 +4,8 @@ import '../theme/app_colors.dart';
 import '../theme/app_text.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/auth_logo.dart';
-
+import '../widgets/primary_button.dart';
+import '../widgets/LoginText.dart';
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
@@ -18,6 +19,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _phoneNumberController = TextEditingController();
   
   bool _isLoading = false;
 
@@ -49,6 +51,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       SnackBar(content: Text('Email has been Registered: ${_emailController.text}')),
   
     );
+  
+    
  
     setState(() => _isLoading = true);
     await Future.delayed(const Duration(seconds: 1));
@@ -62,11 +66,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
 
     
-    void _goToLogin(){
-      Navigator.pop(context);
-    }
+
 
   }
+
+  void _goToLogin(){
+      Navigator.pop(context);
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -99,11 +105,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(),
               CustomTextField(
                 label:'Age' ,
-                hintText: '25', 
+                hintText: 'age', 
                 icon: Icons.numbers_outlined,
                 controller: _ageController,
                 keyboardType: TextInputType.number,
                 ),
+
+              const SizedBox(height: 32),
+              CustomTextField(
+                label: 'Phone Number',
+                hintText: '+62 812 9938 9987',
+                icon: Icons.phone_android_outlined,
+                controller: _phoneNumberController,
+                keyboardType: TextInputType.phone,
+              ),
 
               const SizedBox(height: 32),
               CustomTextField(
@@ -123,8 +138,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 32),
               PrimaryButton(
-
+                text: 'SignUp',
+                onPressed: _handleRegister,
+                isLoading: _isLoading,
               ),
+              const SizedBox(height: 24),
+              LoginText(onTap: _goToLogin)
             ],
           ),
         ),
