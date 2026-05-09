@@ -6,50 +6,43 @@ import '../widgets/custom_text_field.dart';
 import '../widgets/auth_logo.dart';
 import '../widgets/primary_button.dart';
 import '../widgets/LoginText.dart';
-import 'login_screen.dart';
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
-  final _ageController = TextEditingController();
-  final _nameController = TextEditingController();
+class _LoginScreenState extends State<LoginScreen> {
+  
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
-  final _phoneNumberController = TextEditingController();
+ 
+ 
   
   bool _isLoading = false;
 
   @override
   void dispose(){
-    _nameController.dispose();
+   
     _emailController.dispose();
-    _ageController.dispose();
+    
     _passwordController.dispose();
-    _confirmPasswordController.dispose();
+    
     super.dispose();
 
 
   }
 
-  Future<void> _handleRegister() async{
-    if(_passwordController.text != _confirmPasswordController.text){
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match')),
-      );
-      return;
-    }
+  Future<void> _handleLogin() async{
+    
 
     setState(() => _isLoading = true);
     await Future.delayed(const Duration(seconds:1));
     if(!mounted) return;
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Email has been Registered: ${_emailController.text}')),
+      SnackBar(content: Text('Wellcome back! ')),
   
     );
   
@@ -71,11 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   }
 
-  void _goToLogin(){
-     Navigator.push(context,
-      MaterialPageRoute(builder: (_) => const LoginScreen()),
-      );
-    }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -90,39 +79,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(height: 40),
               const AuthLogo(),
               const SizedBox(height: 28),
-              Text('Create Account', style: AppTextStyles.heading),
+              Text('Login', style: AppTextStyles.heading),
               const SizedBox(height: 8),
               Text(
-                'Sign up to get started. ',
+                'Login to existing account',
                 style: AppTextStyles.subtitle,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 32),
-              CustomTextField(label: 'Name', 
-              hintText: 'Name', 
-              icon: Icons.person_outline,
-              controller: _nameController,
-              keyboardType:TextInputType.name
-              ) ,
-          
-              const SizedBox(),
-              CustomTextField(
-                label:'Age' ,
-                hintText: 'age', 
-                icon: Icons.numbers_outlined,
-                controller: _ageController,
-                keyboardType: TextInputType.number,
-                ),
-
-              const SizedBox(height: 32),
-              CustomTextField(
-                label: 'Phone Number',
-                hintText: '+62 812 9938 9987',
-                icon: Icons.phone_android_outlined,
-                controller: _phoneNumberController,
-                keyboardType: TextInputType.phone,
-              ),
-
+              
               const SizedBox(height: 32),
               CustomTextField(
                 label: 'Email Address',
@@ -141,12 +105,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 32),
               PrimaryButton(
-                text: 'SignUp',
-                onPressed: _handleRegister,
+                text: 'Login',
+                onPressed: _handleLogin,
                 isLoading: _isLoading,
               ),
-              const SizedBox(height: 24),
-              LoginText(onTap: _goToLogin)
             ],
           ),
         ),
