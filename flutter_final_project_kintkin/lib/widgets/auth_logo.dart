@@ -6,22 +6,14 @@ class AuthLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: const[
-        SizedBox(
-          height: 80,
-          child: Center(
-            child: Text(
-              'k k',
-              style: TextStyle(
-                fontSize: 44,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 8,
-              ),
-            ),
-          ),
+      children: [
+        Image.asset(
+          'assets/images/kith&kin-logo.jpeg',
+          height: 100,
+          fit: BoxFit.contain,
         ),
-        SizedBox(height: 4),
-        Text(
+        const SizedBox(height: 4),
+        const Text(
           '-Kith & Kin',
           style: TextStyle(
             fontSize: 11,
