@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../widgets/TopBar.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -20,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               //Isi dari pagenya
+              TopBar(),
             ],
           ),
         )

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget _TopBar(){
+Widget TopBar(){
   return Row(
     children: [
       //Profile Section(kiri atas)
