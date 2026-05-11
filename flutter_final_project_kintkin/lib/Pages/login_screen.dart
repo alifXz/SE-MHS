@@ -123,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _goToHome() {
     Navigator.push(context,
-      MaterialPageRoute(builder: (_) => const homeScreen()),
+      MaterialPageRoute(builder: (_) => const HomeScreen()),
     );
   }
 }

@@ -1,28 +1,29 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 
-class homeScreen extends StatelessWidget {
-  const homeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {   
-    return CarouselSlider(
-  options: CarouselOptions(height: 400.0),
-  items: [1,2,3,4,5].map((i) {
-    return Builder(
-      builder: (BuildContext context) {
-        return Container(
-          width: MediaQuery.of(context).size.width,
-          margin: EdgeInsets.symmetric(horizontal: 5.0),
-          decoration: BoxDecoration(
-            color: Colors.amber
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _currentindex = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body:SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //Isi dari pagenya
+            ],
           ),
-          child: Text('text $i', style: TextStyle(fontSize: 16.0),)
-        );
-      },
+        )
+      ),
     );
-  }).toList(),
-);
   }
 }
