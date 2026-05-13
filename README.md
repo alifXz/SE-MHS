@@ -15,4 +15,24 @@ MAIN FEATURES OF THE APP :
 
 5. Payment : This feature serves as a way for users to validate their booking and to pay the necessary fee to attend the event. Various payment methods will be provided to ensure user's variety of choices. Once a payment is successful, the user will be notified that their payment went through and they are good to go.
 
+##Tech Stack
+* Framework : Flutter
+* Front End : Dart
+* Backend : node js (typescript)
+* database : supabase (posgresql)
 
+##Installation
+
+1. Clone repository
+   ```bash
+    git clone https://github.com/NicholasCarlen/SE-MHS.git
+    cd SE-MHS
+    ```
+2. Package Flutter
+   ```bash
+    flutter pub get
+    ```
+3. File Structure
+   'Lib/Pages: Yang berisi semua page dari app'
+   'Lib/themes: berisi semua design dari text dan juga base color dari app kami yang akan digunakan agar        seragam dalam satu tema.'
+   'Lib/widgets : berisi semua widget yang ada di dalam app yang kami gunakan'
