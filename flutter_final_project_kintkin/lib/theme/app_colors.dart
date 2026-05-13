@@ -9,5 +9,8 @@ class AppColors {
   static const Color text1 = Color(0xFF1A1A1A);
   static const Color text2 = Color(0xFF6B7280);
   static const Color textBG = Color(0xFFB0B5BD);
+  static const Color navBar = Color(0xFFFFCD76);
+  static const Color selectnav = Color(0xFF191970);
   
+
 }
