@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/Pages/home_screen.dart';
 import '../theme/app_colors.dart';
@@ -7,7 +6,6 @@ import '../widgets/custom_text_field.dart';
 import '../widgets/auth_logo.dart';
 import '../widgets/primary_button.dart';
 import '../widgets/LoginText.dart';
-import '../Pages/home_screen.dart';
 
 
 class LoginScreen extends StatefulWidget {

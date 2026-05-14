@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_final_project_kintkin/widgets/event_carousel.dart';
 import '../widgets/TopBar.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -8,7 +9,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentindex = 0;
+  final int _currentindex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               //Isi dari pagenya
               TopBar(),
+              const EventCarousel(),
             ],
           ),
         )
