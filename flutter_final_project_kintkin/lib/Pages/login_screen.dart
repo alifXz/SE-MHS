@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/Pages/home_screen.dart';
+import 'package:flutter_final_project_kintkin/pages/register_screen.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text.dart';
 import '../widgets/custom_text_field.dart';
@@ -38,35 +39,22 @@ class _LoginScreenState extends State<LoginScreen> {
 
   }
 
-  Future<void> _handleLogin() async{
-    
+  Future<void> _handleLogin() async {
+  setState(() => _isLoading = true);
+  await Future.delayed(const Duration(seconds: 1));
+  if (!mounted) return;
 
-    setState(() => _isLoading = true);
-    await Future.delayed(const Duration(seconds:1));
-    if(!mounted) return;
+  setState(() => _isLoading = false); 
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Wellcome back! ')),
-  
-    );
-  
-    
- 
-    setState(() => _isLoading = true);
-    await Future.delayed(const Duration(seconds: 1));
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text('Welcome back!')),
+  );
 
-    if(!mounted)return;
+  await Future.delayed(const Duration(milliseconds: 300));
+  if (!mounted) return;
 
-    setState(()=> _isLoading = false);
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Email has been registered: ${_emailController.text}')),
-    );
-
-    
-
-
-  }
+  _goToHome();
+}
 
 
   @override
@@ -82,10 +70,10 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 28),
               const AuthLogo(),
               const SizedBox(height: 28),
-              Text('Login', style: AppTextStyles.heading),
+              Text('Welcome Back!', style: AppTextStyles.heading),
               const SizedBox(height: 8),
               Text(
-                'Login to existing account',
+                'Log in to continue to your account.',
                 style: AppTextStyles.subtitle,
                 textAlign: TextAlign.center,
               ),
@@ -111,9 +99,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 text: 'Login',
                 onPressed: _handleLogin,
                 isLoading: _isLoading,
+                textColor: Colors.white,
               ),
               const SizedBox(height: 24),
-              LoginText(onTap: _goToHome)
+              RegisterText(onTap: _goToRegister)
             ],
           ),
         ),
@@ -124,6 +113,12 @@ class _LoginScreenState extends State<LoginScreen> {
   void _goToHome() {
     Navigator.push(context,
       MaterialPageRoute(builder: (_) => const HomeScreen()),
+    );
+  }
+
+  void _goToRegister() {
+    Navigator.push(context,
+      MaterialPageRoute(builder: (_) => const RegisterScreen()),
     );
   }
 }

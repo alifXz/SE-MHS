@@ -66,7 +66,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       SnackBar(content: Text('Email has been registered: ${_emailController.text}')),
     );
 
-    
+    _goToLogin();
 
 
   }
@@ -87,7 +87,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
               const AuthLogo(),
               const SizedBox(height: 28),
               Text('Create Account', style: AppTextStyles.heading),
@@ -98,14 +98,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 textAlign: TextAlign.center,
               ),
               
-              const SizedBox(height: 32),
+              const SizedBox(height: 20),
               CustomTextField(label: 'Name', 
               hintText: 'Name', 
               icon: Icons.person_outline,
               controller: _nameController,
               keyboardType:TextInputType.name
               ) ,
-            const SizedBox(),
+            const SizedBox(height: 20,),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -117,7 +117,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 keyboardType: TextInputType.number,
                 ),
                 ),
-              const SizedBox(height: 32),
+              const SizedBox(width:  5),
               Expanded(child: 
               CustomTextField(
                 label: 'Phone Number',
@@ -129,7 +129,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               ],
             ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 20),
               CustomTextField(
                 label: 'Email Address',
                 hintText: 'aaa@gmail.com',
@@ -138,18 +138,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 keyboardType: TextInputType.emailAddress,
               ),
               
-              const SizedBox(height: 32),
+              const SizedBox(height: 20),
               CustomTextField(
               label:'Password' , 
               hintText: '.....', 
               icon: Icons.lock_outlined,
               obscureText: true,
               ),
+              const SizedBox(height: 20),
+              CustomTextField(
+              label:'Re-Enter Password' , 
+              hintText: '.....', 
+              icon: Icons.lock_outlined,
+              obscureText: true,
+              ),
               const SizedBox(height: 32),
               PrimaryButton(
-                text: 'SignUp',
+                text: 'Sign Up',
                 onPressed: _handleRegister,
                 isLoading: _isLoading,
+                textColor: Colors.white,
               ),
               const SizedBox(height: 24),
               LoginText(onTap: _goToLogin)

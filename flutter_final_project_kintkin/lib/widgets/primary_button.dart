@@ -3,19 +3,20 @@ import '../theme/app_colors.dart';
 import '../theme/app_text.dart';
 
 class PrimaryButton extends StatelessWidget {
-
   final String text;
   final VoidCallback onPressed;
   final bool isLoading;
-
-
+  final Color? textColor;
+  final TextStyle? textStyle;
 
   const PrimaryButton({
     super.key,
     required this.text,
     required this.onPressed,
     this.isLoading = false,
-    });
+    this.textColor,
+    this.textStyle,
+  }); // ← this closing ); was missing
 
   @override
   Widget build(BuildContext context) {
@@ -32,16 +33,22 @@ class PrimaryButton extends StatelessWidget {
             borderRadius: BorderRadiusGeometry.circular(30),
           ),
         ),
-         child: isLoading ? const SizedBox(
-          width: 22,
-          height: 22,
-          child: CircularProgressIndicator(
-            color:Colors.white,
-            strokeWidth: 2,
-          ),
-         )
-         :Text(text,style: AppTextStyles.button),
-         ),
+        child: isLoading
+            ? const SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 2,
+                ),
+              )
+            : Text(
+                text,
+                style: textStyle ?? AppTextStyles.button.copyWith(
+                  color: textColor,
+                ),
+              ),
+      ),
     );
   }
 }
