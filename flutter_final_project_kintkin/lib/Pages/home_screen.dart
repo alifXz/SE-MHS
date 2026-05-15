@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/widgets/event_carousel.dart';
 import '../widgets/TopBar.dart';
+import '../widgets/Navbar.dart';
+import '../theme/app_colors.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -9,23 +12,37 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final int _currentindex = 0;
+  int _currentindex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body:SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //Isi dari pagenya
-              TopBar(),
-              const EventCarousel(),
-            ],
-          ),
-        )
+      backgroundColor: AppColors.background, // Match the NavBar background!
+      
+      // 1. The Body
+      body: SafeArea(
+        child: Column(
+          children: [
+            TopBar(), // Your existing TopBar
+            Expanded(
+              child: Center(
+                child: Text("Page Index: $_currentindex", style: TextStyle(color: Colors.white, fontSize: 24)),
+              ),
+            ),
+          ],
+        ),
+      ),
+
+      
+
+      // 2. The Bottom NavBar (using your new widget function)
+      bottomNavigationBar: Navbar(
+        selectedIndex: _currentindex,
+        onTabTapped: (index) {
+          setState(() {
+            _currentindex = index;
+          });
+        },
       ),
     );
   }
