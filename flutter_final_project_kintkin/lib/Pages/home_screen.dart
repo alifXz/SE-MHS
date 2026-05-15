@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_final_project_kintkin/widgets/event_carousel.dart';
+import 'package:flutter_final_project_kintkin/widgets/activity_carousel.dart';
 import '../widgets/TopBar.dart';
 import '../widgets/Navbar.dart';
 import '../theme/app_colors.dart';
@@ -29,17 +29,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(
-                      height: 16,
-                    ), // Gives some spacing below TopBar
-                    // ==========================================
-                    // PLACED YOUR CAROUSEL HERE!
-                    // ==========================================
-                    const EventCarousel(),
-
-                    const SizedBox(height: 24), // Spacing below carousel
-                    // You can keep your index text here temporarily for debugging,
-                    // or replace it with your next Figma sections (e.g., Categories, Events list)
+                    const SizedBox(height: 16),
+                    const ActivityCarousel(),
+                    const SizedBox(height: 24), 
+                    
+                    // index temp
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
