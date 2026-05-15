@@ -1,26 +1,19 @@
 import 'package:flutter/material.dart';
+import 'event_card.dart';
 import 'basic_card.dart';
 
-class ActivityCarousel extends StatefulWidget {
-  const ActivityCarousel({super.key});
+class EventCarousel extends StatefulWidget {
+  const EventCarousel({super.key});
 
   @override
-  State<ActivityCarousel> createState() => _ActivityCarouselState();
+  State<EventCarousel> createState() => _EventCarouselState();
 }
 
-class _ActivityCarouselState extends State<ActivityCarousel> {
-  int _currentIndex = 0;
+class _EventCarouselState extends State<EventCarousel> {
+  int _currentIndex = 1; // start at center
   late final PageController _pageController;
 
   final List<EventData> events = [
-    EventData(
-      title: "Escape Room",
-      location: "Alam Sutera Mall, Alam Sutera",
-      time: "10:00 - 15:00",
-      date: "Thursday, 23rd July 2026",
-      imageUrl: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800",
-      type: "POPULAR",
-    ),
     EventData(
       title: "Padel Mini Tournament",
       location: "South Jakarta Courts",
@@ -28,6 +21,14 @@ class _ActivityCarouselState extends State<ActivityCarousel> {
       date: "Saturday, 25th July 2026",
       imageUrl: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=800",
       type: "COMING SOON",
+    ),
+    EventData(
+      title: "Escape Room",
+      location: "Alam Sutera Mall, Alam Sutera",
+      time: "10:00 - 15:00",
+      date: "Thursday, 23rd July 2026",
+      imageUrl: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800",
+      type: "POPULAR",
     ),
     EventData(
       title: "Ice Skating Party",
@@ -43,7 +44,7 @@ class _ActivityCarouselState extends State<ActivityCarousel> {
   void initState() {
     super.initState();
     _pageController = PageController(
-      viewportFraction: 0.78,
+      viewportFraction: 0.5, 
       initialPage: _currentIndex,
     );
   }
@@ -62,7 +63,7 @@ class _ActivityCarouselState extends State<ActivityCarousel> {
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 24),
           child: Text(
-            'Recent Activities :',
+            'Upcoming Events :',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -70,9 +71,9 @@ class _ActivityCarouselState extends State<ActivityCarousel> {
             ),
           ),
         ),
-        const SizedBox(height: 5),
+        const SizedBox(height: 12),
         SizedBox(
-          height: 275,
+          height: 320, 
           child: PageView.builder(
             controller: _pageController,
             itemCount: events.length,
@@ -80,12 +81,13 @@ class _ActivityCarouselState extends State<ActivityCarousel> {
             itemBuilder: (context, index) {
               final isCenter = index == _currentIndex;
               return AnimatedScale(
-                scale: isCenter ? 1.0 : 1.0,
+                scale: isCenter ? 1.02 : 0.8,
                 duration: const Duration(milliseconds: 300),
-                child: BasicCard(
+                child: EventCard(
                   event: events[index],
+                  isCenter: isCenter,
                   onTap: () {
-                    // TODO: navigate to ActivityHistoryPage
+                    // TODO: navigate to EventDetailPage
                   },
                 ),
               );

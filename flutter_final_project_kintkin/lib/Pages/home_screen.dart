@@ -3,6 +3,7 @@ import 'package:flutter_final_project_kintkin/widgets/activity_carousel.dart';
 import '../widgets/TopBar.dart';
 import '../widgets/Navbar.dart';
 import '../theme/app_colors.dart';
+import '../widgets/event_carousel.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: AppColors.background, // Match the NavBar background!
       
-      // 1. The Body
+      //Body
       body: SafeArea(
         child: Column(
           children: [
@@ -29,9 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 16),
+                    const EventCarousel(),
+                    const SizedBox(height: 24),
                     const ActivityCarousel(),
-                    const SizedBox(height: 24), 
                     
                     // index temp
                     Padding(
@@ -53,8 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
 
 
-
-      // 2. The Bottom NavBar (using your new widget function)
       bottomNavigationBar: Navbar(
         selectedIndex: _currentindex,
         onTabTapped: (index) {
