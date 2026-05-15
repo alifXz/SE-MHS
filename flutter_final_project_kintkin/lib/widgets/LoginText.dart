@@ -22,3 +22,25 @@ class LoginText extends StatelessWidget {
     );
   }
 }
+
+class RegisterText extends StatelessWidget {
+  final VoidCallback onTap;
+  const RegisterText({required this.onTap, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text(
+          "Don't Have an Account? ",
+          style: AppTextStyles.bodyText,
+        ),
+        GestureDetector(
+          onTap: onTap,
+          child: const Text('Register Here!', style: AppTextStyles.linkText),
+        ),
+      ],
+    );
+  }
+}
