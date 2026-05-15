@@ -25,15 +25,40 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             TopBar(), // Your existing TopBar
             Expanded(
-              child: Center(
-                child: Text("Page Index: $_currentindex", style: TextStyle(color: Colors.white, fontSize: 24)),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 16,
+                    ), // Gives some spacing below TopBar
+                    // ==========================================
+                    // PLACED YOUR CAROUSEL HERE!
+                    // ==========================================
+                    const EventCarousel(),
+
+                    const SizedBox(height: 24), // Spacing below carousel
+                    // You can keep your index text here temporarily for debugging,
+                    // or replace it with your next Figma sections (e.g., Categories, Events list)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        "Current Section Index: $_currentindex",
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
         ),
       ),
 
-      
+
 
       // 2. The Bottom NavBar (using your new widget function)
       bottomNavigationBar: Navbar(
