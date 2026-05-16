@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_final_project_kintkin/widgets/event_carousel.dart';
+import 'package:flutter_final_project_kintkin/widgets/recent_activities.dart';
+import '../widgets/event_carousel.dart';
 import '../widgets/TopBar.dart';
 import '../widgets/Navbar.dart';
+import '../widgets/interests_section.dart';
 import '../theme/app_colors.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -32,9 +34,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(
                       height: 16,
                     ), // Gives some spacing below TopBar
-                    // ==========================================
-                    // PLACED YOUR CAROUSEL HERE!
-                    // ==========================================
+
+                    const InterestsSection(),
+
+                     Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        "Current Section Index: $_currentindex",
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                    
                     const EventCarousel(),
 
                     const SizedBox(height: 24), // Spacing below carousel
@@ -50,6 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
+
+                    const RecentActivities()
                   ],
                 ),
               ),
