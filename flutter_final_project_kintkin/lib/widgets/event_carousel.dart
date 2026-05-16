@@ -1,4 +1,4 @@
-import 'dart:ui'; // Necessary for ImageFilter.blur
+// Necessary for ImageFilter.blur
 import 'package:flutter/material.dart';
 import 'event_card.dart';
 import 'basic_card.dart';

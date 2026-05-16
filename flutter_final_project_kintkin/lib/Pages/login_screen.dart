@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_final_project_kintkin/Pages/home_screen.dart';
+import 'package:flutter_final_project_kintkin/Pages/main_screen.dart';
 import 'package:flutter_final_project_kintkin/pages/register_screen.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text.dart';
@@ -110,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _goToHome() {
     Navigator.push(context,
-      MaterialPageRoute(builder: (_) => const HomeScreen()),
+      MaterialPageRoute(builder: (_) => const MainScreen()),
     );
   }
 
