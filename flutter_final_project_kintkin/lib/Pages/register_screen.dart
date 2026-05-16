@@ -5,6 +5,7 @@ import '../widgets/custom_text_field.dart';
 import '../widgets/auth_logo.dart';
 import '../widgets/primary_button.dart';
 import '../widgets/LoginText.dart';
+import '../services/auth_service.dart';
 import 'login_screen.dart';
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -14,13 +15,16 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  // Authentication service layer instance
+  final AuthService _authService = AuthService();
+
   final _ageController = TextEditingController();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _phoneNumberController = TextEditingController();
-  
+
   bool _isLoading = false;
 
   @override
@@ -30,44 +34,97 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _ageController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _phoneNumberController.dispose();
     super.dispose();
 
 
   }
 
-  Future<void> _handleRegister() async{
-    if(_passwordController.text != _confirmPasswordController.text){
+// HANDLE REGISTER ///////////////////////////////
+
+Future<void> _handleRegister() async {
+    // 1. Basic Local Validation Checks
+    if (_nameController.text.trim().isEmpty ||
+        _emailController.text.trim().isEmpty ||
+        _passwordController.text.isEmpty ||
+        _ageController.text.trim().isEmpty ||
+        _phoneNumberController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match')),
+        const SnackBar(content: Text('Please fill out all fields')),
       );
       return;
     }
 
+    if (_passwordController.text != _confirmPasswordController.text) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
+      return;
+    }
+
+    // 2. Start Network Operation
     setState(() => _isLoading = true);
-    await Future.delayed(const Duration(seconds:1));
-    if(!mounted) return;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Email has been Registered: ${_emailController.text}')),
-  
-    );
-  
-    
- 
-    setState(() => _isLoading = true);
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      // Run the dynamic authentication service request
+      await _authService.registerWithEmailAndPassword(
+        name: _nameController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
+        age: int.tryParse(_ageController.text.trim()) ?? 0,
+        phoneNumber: _phoneNumberController.text,
+      );
 
-    if(!mounted)return;
+      if (!mounted) return;
 
-    setState(()=> _isLoading = false);
+      // Reset loading here to ensure UI is interactive if they come back to this screen
+      setState(() => _isLoading = false);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Email has been registered: ${_emailController.text}')),
-    );
+      // 3. Success Feedback and Redirection
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Account successfully registered: ${_emailController.text}',
+          ),
+        ),
+      );
 
-    _goToLogin();
+      _goToLogin();
+    } catch (e) {
+      // <-- Changed from 'on Exception catch (e)' to catch ALL errors
+      if (!mounted) return;
 
+      // Stop loading on error
+      setState(() => _isLoading = false);
 
+      // 4. Error Handling: Display clean error messages directly from Firebase
+      String errorMessage = "Registration failed. Please try again.";
+      final errorString = e.toString();
+
+      // Flexible matching for both raw strings and Firebase exceptions
+      if (errorString.contains('email-already-in-use')) {
+        errorMessage =
+            "This email address is already in use by another account.";
+      } else if (errorString.contains('weak-password')) {
+        errorMessage = "The password provided is too weak.";
+      } else if (errorString.contains('invalid-email')) {
+        errorMessage = "The email address is badly formatted.";
+      } else if (errorString.contains('network-request-failed')) {
+        errorMessage = "No internet connection detected.";
+      } else {
+        // Fallback to show the raw error message if it's something unexpected
+        errorMessage = errorString.replaceFirst('Exception: ', '');
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+    }
+    // Removed the 'finally' block because we handle state changes explicitly
+    // inside try (success paths) and catch (error paths) safely.
   }
 
   void _goToLogin(){
@@ -142,6 +199,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               label:'Password' , 
               hintText: '.....', 
               icon: Icons.lock_outlined,
+              controller: _passwordController,
               obscureText: true,
               ),
               const SizedBox(height: 20),
@@ -149,12 +207,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
               label:'Re-Enter Password' , 
               hintText: '.....', 
               icon: Icons.lock_outlined,
+              controller: _confirmPasswordController,
               obscureText: true,
               ),
               const SizedBox(height: 32),
               PrimaryButton(
                 text: 'Sign Up',
-                onPressed: _handleRegister,
+                onPressed: () => _handleRegister(),
                 isLoading: _isLoading,
                 textColor: Colors.white,
               ),
