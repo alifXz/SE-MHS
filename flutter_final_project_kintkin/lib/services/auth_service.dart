@@ -59,4 +59,22 @@ class AuthService {
   Future<void> signOut() async {
     await _auth.signOut();
   }
+
+  Future<String> getUserName(String uid) async {
+    try {
+      DocumentSnapshot doc = await _firestore
+          .collection('users')
+          .doc(uid)
+          .get();
+      if (doc.exists && doc.data() != null) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        return data['name'] ?? "User";
+      }
+      return "User";
+    } catch (e) {
+      print("Error in getUserName service: $e");
+      return "User"; // Fallback name
+    }
+  }
 }
+

@@ -17,7 +17,7 @@ class _MainScreenState extends State<MainScreen> {
 
   // 1. Define your screens here in the exact order of your Navbar items
   final List<Widget> _pages = [
-    const HomeScreenContent(), // We will modify HomeScreen slightly below
+    const HomeScreen(), // We will modify HomeScreen slightly below
     const ExploreScreen(),
     const Center(
       child: Text('Messages Screen', style: TextStyle(color: Colors.white)),

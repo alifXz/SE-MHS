@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_final_project_kintkin/Pages/home_screen.dart';
+import 'package:flutter_final_project_kintkin/Pages/main_screen.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text.dart';
 import '../widgets/custom_text_field.dart';
@@ -75,33 +77,23 @@ Future<void> _handleRegister() async {
         phoneNumber: _phoneNumberController.text,
       );
 
-      if (!mounted) return;
+      // --- SUCCESS PATH ---
 
-      // Reset loading here to ensure UI is interactive if they come back to this screen
-      setState(() => _isLoading = false);
-
-      // 3. Success Feedback and Redirection
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Account successfully registered: ${_emailController.text}',
-          ),
-        ),
-      );
-
-      _goToLogin();
+      // Always turn off loading first so the button goes back to normal if they return to this page
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+      
     } catch (e) {
-      // <-- Changed from 'on Exception catch (e)' to catch ALL errors
+      // --- ERROR PATH ---
       if (!mounted) return;
 
-      // Stop loading on error
+      // Turn off loading because an error occurred
       setState(() => _isLoading = false);
 
-      // 4. Error Handling: Display clean error messages directly from Firebase
       String errorMessage = "Registration failed. Please try again.";
       final errorString = e.toString();
 
-      // Flexible matching for both raw strings and Firebase exceptions
       if (errorString.contains('email-already-in-use')) {
         errorMessage =
             "This email address is already in use by another account.";
@@ -109,11 +101,6 @@ Future<void> _handleRegister() async {
         errorMessage = "The password provided is too weak.";
       } else if (errorString.contains('invalid-email')) {
         errorMessage = "The email address is badly formatted.";
-      } else if (errorString.contains('network-request-failed')) {
-        errorMessage = "No internet connection detected.";
-      } else {
-        // Fallback to show the raw error message if it's something unexpected
-        errorMessage = errorString.replaceFirst('Exception: ', '');
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -123,15 +110,21 @@ Future<void> _handleRegister() async {
         ),
       );
     }
-    // Removed the 'finally' block because we handle state changes explicitly
-    // inside try (success paths) and catch (error paths) safely.
   }
 
-  void _goToLogin(){
-     Navigator.push(context,
-      MaterialPageRoute(builder: (_) => const LoginScreen()),
-      );
+  void _goToMain(){
+     Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const MainScreen()),
+    );
     }
+
+  void _goToLogin() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginScreen()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
