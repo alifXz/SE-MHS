@@ -30,7 +30,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       // Use your AppColors.background here
       // 2. Display the active page dynamically based on index
       body: IndexedStack(index: _currentIndex, children: _pages),
 
