@@ -1,28 +1,18 @@
-import 'dart:ui'; // Necessary for ImageFilter.blur
 import 'package:flutter/material.dart';
-import 'event_card.dart';
 import 'basic_card.dart';
 
-class EventCarousel extends StatefulWidget {
-  const EventCarousel({super.key});
+class ActivityCarousel extends StatefulWidget {
+  const ActivityCarousel({super.key});
 
   @override
-  State<EventCarousel> createState() => _EventCarouselState();
+  State<ActivityCarousel> createState() => _ActivityCarouselState();
 }
 
-class _EventCarouselState extends State<EventCarousel> {
-  int _currentIndex = 1; // start at center
+class _ActivityCarouselState extends State<ActivityCarousel> {
+  int _currentIndex = 0;
   late final PageController _pageController;
 
   final List<EventData> events = [
-    EventData(
-      title: "Padel Mini Tournament",
-      location: "South Jakarta Courts",
-      time: "08:00 - 12:00",
-      date: "Saturday, 25th July 2026",
-      imageUrl: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=800",
-      type: "COMING SOON",
-    ),
     EventData(
       title: "Escape Room",
       location: "Alam Sutera Mall, Alam Sutera",
@@ -30,6 +20,14 @@ class _EventCarouselState extends State<EventCarousel> {
       date: "Thursday, 23rd July 2026",
       imageUrl: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800",
       type: "POPULAR",
+    ),
+    EventData(
+      title: "Padel Mini Tournament",
+      location: "South Jakarta Courts",
+      time: "08:00 - 12:00",
+      date: "Saturday, 25th July 2026",
+      imageUrl: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=800",
+      type: "COMING SOON",
     ),
     EventData(
       title: "Ice Skating Party",
@@ -45,7 +43,7 @@ class _EventCarouselState extends State<EventCarousel> {
   void initState() {
     super.initState();
     _pageController = PageController(
-      viewportFraction: 0.5, 
+      viewportFraction: 0.78,
       initialPage: _currentIndex,
     );
   }
@@ -62,15 +60,19 @@ class _EventCarouselState extends State<EventCarousel> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+          padding: EdgeInsets.symmetric(horizontal: 24),
           child: Text(
-            'Upcoming Events',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            'Recent Activities :',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 5),
         SizedBox(
-          height: 320, 
+          height: 275,
           child: PageView.builder(
             controller: _pageController,
             itemCount: events.length,
@@ -78,13 +80,12 @@ class _EventCarouselState extends State<EventCarousel> {
             itemBuilder: (context, index) {
               final isCenter = index == _currentIndex;
               return AnimatedScale(
-                scale: isCenter ? 1.02 : 0.8,
+                scale: isCenter ? 1.0 : 1.0,
                 duration: const Duration(milliseconds: 300),
-                child: EventCard(
+                child: BasicCard(
                   event: events[index],
-                  isCenter: isCenter,
                   onTap: () {
-                    // TODO: navigate to EventDetailPage
+                    // TODO: navigate to ActivityHistoryPage
                   },
                 ),
               );

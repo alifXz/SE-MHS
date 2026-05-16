@@ -43,7 +43,7 @@ class Navbar extends StatelessWidget {
       ],
       color: AppColors.navBarbg,
       buttonBackgroundColor: AppColors.selectedNav,
-      backgroundColor: AppColors.background,
+      backgroundColor: Colors.transparent,
       animationCurve: Curves.easeInOut,
       animationDuration: const Duration(milliseconds: 300),
       onTap: onTabTapped,
