@@ -30,10 +30,10 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // 2. Display the active page dynamically based on index
-      body: IndexedStack(index: _currentIndex, children: _pages),
+      
 
-      // 3. Keep the Navbar fixed globally at the bottom
+      body: IndexedStack(index: _currentIndex, children: _pages),
+      
       bottomNavigationBar: Navbar(
         selectedIndex: _currentIndex,
         onTabTapped: (index) {

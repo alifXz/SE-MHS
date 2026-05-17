@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../widgets/explore_card.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -10,7 +9,7 @@ class ExploreScreen extends StatefulWidget {
 }
 
 class _ExploreScreenState extends State<ExploreScreen> {
-  bool isEventsSelected = true; // State to toggle between tabs
+  bool isEventsSelected = true;
 
   @override
   Widget build(BuildContext context) {
@@ -61,14 +60,16 @@ class _ExploreScreenState extends State<ExploreScreen> {
                             "Events",
                             isEventsSelected,
                             () => setState(() => isEventsSelected = true),
+                            const Color(0xFF801A1A), // red
                           ),
                         ),
                         // Communities Tab
                         Expanded(
                           child: _buildToggleButton(
-                            "Communities",
-                            !isEventsSelected,
-                            () => setState(() => isEventsSelected = false),
+                            "Communities",          
+                            !isEventsSelected,      
+                            () => setState(() => isEventsSelected = false), 
+                            const Color(0xFF003049), 
                           ),
                         ),
                       ],
@@ -88,12 +89,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
               ],
             ),
           ),
-
           // --- DYNAMIC LIST SECTION ---
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(16),
-              itemCount: 3, // Replace with your data length
+              itemCount: 3,
               itemBuilder: (context, index) {
                 return ExploreCard(isCommunity: !isEventsSelected);
               },
@@ -104,12 +104,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
-  Widget _buildToggleButton(String label, bool active, VoidCallback onTap) {
+  Widget _buildToggleButton(String label, bool active, VoidCallback onTap, Color activeColor) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: active ? const Color(0xFF801A1A) : Colors.transparent,
+          color: active ? activeColor : Colors.transparent,
           borderRadius: BorderRadius.circular(30),
         ),
         alignment: Alignment.center,

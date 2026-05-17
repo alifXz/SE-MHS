@@ -41,6 +41,8 @@ class Navbar extends StatelessWidget {
           label: 'Schedule',
         ),
       ],
+
+      
       color: AppColors.navBarbg,
       buttonBackgroundColor: AppColors.selectedNav,
       backgroundColor: Colors.transparent,

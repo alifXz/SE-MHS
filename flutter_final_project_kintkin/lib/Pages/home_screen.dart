@@ -51,29 +51,27 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            TopBar(userName: _userName),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const EventCarousel(),
-                    const SizedBox(height: 24),
-                    const ActivityCarousel(),
-                  ],
-                ),
-              ),
+ @override
+Widget build(BuildContext context) {
+  return SafeArea(
+    child: Column(
+      children: [
+        TopBar(userName: _userName),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const EventCarousel(),
+                const SizedBox(height: 32),
+                const ActivityCarousel(),
+                const SizedBox(height: 80), // ← add this so content doesn't hide behind navbar
+              ],
             ),
-          ],
+          ),
         ),
-      ),
-    );
-  }
+      ],
+    ),
+  );
+}
 }
