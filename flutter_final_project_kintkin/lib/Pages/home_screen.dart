@@ -65,7 +65,7 @@ Widget build(BuildContext context) {
                 const EventCarousel(),
                 const SizedBox(height: 32),
                 const ActivityCarousel(),
-                const SizedBox(height: 80), // ← add this so content doesn't hide behind navbar
+                const SizedBox(height: 80),
               ],
             ),
           ),

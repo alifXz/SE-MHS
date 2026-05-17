@@ -15,30 +15,38 @@ class _ExploreScreenState extends State<ExploreScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: const Text(
-          "Find Your Event/Community!",
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(70),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 34, vertical: 15),
+              child: Row(
+                children: [
+                  const Text(
+                    "Find Your Event/Community!",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.notifications_none, color: Colors.black),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.menu, color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.notifications_none, color: Colors.black),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.menu, color: Colors.black),
-          ),
-        ],
-      ),
       body: Column(
         children: [
+
           // --- TAB TOGGLE SECTION ---
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
@@ -89,10 +97,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
               ],
             ),
           ),
+          
           // --- DYNAMIC LIST SECTION ---
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(20),
               itemCount: 3,
               itemBuilder: (context, index) {
                 return ExploreCard(isCommunity: !isEventsSelected);
@@ -101,6 +110,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
           ),
         ],
       ),
+      
     );
   }
 
