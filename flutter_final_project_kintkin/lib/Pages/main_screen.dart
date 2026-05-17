@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/Navbar.dart';
 import 'home_screen.dart';
 import 'explore_screen.dart'; // Uncomment this when you create it
+import 'schedule_screen.dart';
 // import 'messages_screen.dart';
 // import 'schedule_screen.dart';
 
@@ -22,9 +23,7 @@ class _MainScreenState extends State<MainScreen> {
     const Center(
       child: Text('Messages Screen', style: TextStyle(color: Colors.white)),
     ),
-    const Center(
-      child: Text('Schedule Screen', style: TextStyle(color: Colors.white)),
-    ),
+    const Calendar()
   ];
 
   @override

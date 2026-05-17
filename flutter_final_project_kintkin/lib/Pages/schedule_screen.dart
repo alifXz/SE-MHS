@@ -14,7 +14,7 @@ class _CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Simple Calendar')),
+      appBar: AppBar(title: Text('Schedule')),
       body: TableCalendar(
         focusedDay: _focusedDay, 
         firstDay: DateTime.utc(2026, 1, 1),
