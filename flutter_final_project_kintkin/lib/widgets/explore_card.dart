@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'event_popup_modal.dart';
 
 class ExploreCard extends StatelessWidget {
   final bool isCommunity;
@@ -7,12 +8,14 @@ class ExploreCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return isCommunity ? _buildCommunityCard() : _buildEventCard();
+    return isCommunity ? _buildCommunityCard() : _buildEventCard(context);
   }
 
   //Event Cards
-  Widget _buildEventCard() {
-    return Container(
+  Widget _buildEventCard(BuildContext context) {
+    return GestureDetector(
+    onTap: () => EventPopupModal.show(context),
+    child: Container(
       margin: const EdgeInsets.only(bottom: 16),
       height: 180,
       decoration: BoxDecoration(
@@ -114,6 +117,7 @@ class ExploreCard extends StatelessWidget {
           ),
         ],
       ),
+    ),
     );
   }
 
