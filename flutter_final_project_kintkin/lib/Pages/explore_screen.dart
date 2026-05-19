@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/app_drawer.dart';
 import '../widgets/explore_card.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const AppDrawer(),
       backgroundColor: Colors.white,
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(70),
@@ -35,9 +37,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     onPressed: () {},
                     icon: const Icon(Icons.notifications_none, color: Colors.black),
                   ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.menu, color: Colors.black),
+                 Builder(
+                    builder: (context) => IconButton(
+                      onPressed: () => Scaffold.of(context).openDrawer(),
+                      icon: const Icon(Icons.menu, color: Colors.black),
+                    ),
                   ),
                 ],
               ),
