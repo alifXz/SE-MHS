@@ -20,8 +20,20 @@ class _CalendarState extends State<Calendar>{
       time: '05:00 - 10:00', 
       date: '18 May 2026 ', 
       imageUrl: "", 
-      type: 'Sports'
+      type: 'Sports',
       ),
+     
+    ],
+
+    DateTime.utc(2026,5,19):[
+    EventData( 
+     title: 'Padel', 
+     location: 'Padelton',
+     time: '16:00 - 18:00', 
+     date: '19 May 2026', 
+     imageUrl: "", 
+     type: 'Sports',
+     ),
     ],
   };
 
