@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../Pages/history_page.dart';
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
 
@@ -34,11 +34,11 @@ class AppDrawer extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.of(context).pop(); // close drawer first
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) => const ActivityHistoryPage(),
-                //   ),
-                // ); NANTI KALAU SUDAH ADA ACTIVITY HISTORY TARUH DISINI!!!
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const ActivityHistory(),
+                  ),
+                );
               },
             ),
           ],
