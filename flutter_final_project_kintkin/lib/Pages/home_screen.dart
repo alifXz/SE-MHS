@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_final_project_kintkin/widgets/activity_carousel.dart';
 import '../services/auth_service.dart'; // Import your service layer!
 import '../widgets/TopBar.dart';
+import '../widgets/app_drawer.dart';
 import '../widgets/event_carousel.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -53,8 +55,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
  @override
 Widget build(BuildContext context) {
-  return SafeArea(
-    child: Column(
+  return Scaffold(
+    drawer: const AppDrawer(),
+    body: Column(
       children: [
         TopBar(userName: _userName),
         Expanded(

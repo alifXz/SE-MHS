@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import '../widgets/app_drawer.dart';
 import '../widgets/basic_card.dart';
 class Calendar extends StatefulWidget {
   const Calendar({super.key});
@@ -44,7 +45,38 @@ class _CalendarState extends State<Calendar>{
     final key = DateTime.utc(day.year, day.month, day.day);
     final events = _events[key] ?? [];
     return Scaffold(
-      appBar: AppBar(title: Text('Schedule')),
+    drawer: const AppDrawer(),
+     appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(70),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 34, vertical: 15),
+              child: Row(
+                children: [
+                  const Text(
+                    "Schedule",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.notifications_none, color: Colors.black),
+                  ),
+                  Builder(
+                    builder: (context) => IconButton(
+                      onPressed: () => Scaffold.of(context).openDrawer(),
+                      icon: const Icon(Icons.menu, color: Colors.black),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       body: Column(
        children: [
           TableCalendar(

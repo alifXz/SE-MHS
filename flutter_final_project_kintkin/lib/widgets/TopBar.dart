@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'app_drawer.dart';
 
 class TopBar extends StatelessWidget {
   final String userName;
@@ -29,8 +30,8 @@ class TopBar extends StatelessWidget {
               icon: const Icon(Icons.notifications_outlined,color: Colors.black),
             ),
             IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.menu,color: Colors.black),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+              icon: const Icon(Icons.menu, color: Colors.black),
             ),
           ],
         ),
