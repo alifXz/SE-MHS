@@ -33,11 +33,7 @@ class Navbar extends StatelessWidget {
           label: 'Explore',
         ),
         CurvedNavigationBarItem(
-          child: Icon(Icons.chat_bubble_outline, color: iconColor(2)),
-          label: 'Messages',
-        ),
-        CurvedNavigationBarItem(
-          child: Icon(Icons.calendar_month, color: iconColor(3)),
+          child: Icon(Icons.calendar_month, color: iconColor(2)),
           label: 'Schedule',
         ),
       ],
