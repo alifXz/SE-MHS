@@ -56,7 +56,7 @@ class _CalendarState extends State<Calendar>{
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: 15,
                     ),
                   ),
                   const Spacer(),
