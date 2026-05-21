@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../Pages/payment_screen.dart';
 class JoinButton extends StatefulWidget {
   const JoinButton({super.key});
 
@@ -22,12 +22,15 @@ class _JoinButtonState extends State<JoinButton> {
         child: GestureDetector(
           onTapDown: (_) => setState(() => _pressing = true),
           onTapUp: (_) => setState(() => _pressing = false),
-          // onTap: (_) {
-          //   setState(() => _pressing = false);
-          //   Navigator.of(context).push(
-          //     MaterialPageRoute(builder: (context) => const YourNextPage()),
-          //   );
-          // }, NANTI BUAT KE PAYMENT
+          onTap: () {
+            setState(() => _pressing = false);
+            Navigator.of(context).pop();
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const PaymentScreen()
+                ),
+            );
+          }, 
           onTapCancel: () => setState(() => _pressing = false),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 100),
