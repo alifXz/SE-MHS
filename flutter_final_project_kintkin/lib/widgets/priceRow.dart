@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
-
-Widget priceRow(String label, String value, {bool isBold = false}) {
-    final style = TextStyle(
-      fontSize: 15,
-      fontWeight: isBold ? FontWeight.bold : FontWeight.w400,
-      color: isBold ? const Color(0xFF1B3A4A) : Colors.grey[600],
-    );
-    return Row(
+Widget buildDetailRow(String label, String value, {bool isTotal = false}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 4.0),
+    child: Row( // <--- Sudah diganti menjadi child
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: style),
-        Text(value, style: style),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: isTotal ? 16 : 14,
+            fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
+            color: isTotal ? const Color(0xFF1B3A4A) : Colors.black54,
+          ),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: isTotal ? 16 : 14,
+            fontWeight: isTotal ? FontWeight.bold : FontWeight.w600,
+            color: isTotal ? const Color(0xFF1B3A4A) : Colors.black87,
+          ),
+        ),
       ],
-    );
-  }
+    ),
+  );
+}

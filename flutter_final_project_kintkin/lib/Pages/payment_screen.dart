@@ -1,6 +1,10 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_final_project_kintkin/widgets/join_event_button.dart';
 import '../widgets/build_header.dart';
+import '../widgets/price_details.dart';
+import '../widgets/paymentMethod.dart';
+import '../widgets/payment_finnish_button.dart';
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({super.key});
 
@@ -49,9 +53,17 @@ class _PaymentScreen extends State<PaymentScreen> {
                   children: [
                     const SizedBox(height: 30),
                     buildHeader(),
+                    const SizedBox(height: 30),
+                     buildPaymentDetails(),
+                    const SizedBox(height: 30),
+                      PaymentMethodSection()
                   ],
                 ),
               ),
+            ),
+             Padding(
+              padding: const EdgeInsets.all(20.0),
+              child:PaymentFinnishButton() ,
             ),
           ],
         ),

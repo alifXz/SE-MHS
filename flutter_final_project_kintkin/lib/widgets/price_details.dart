@@ -1,26 +1,21 @@
 import 'package:flutter/material.dart';
-import 'priceRow.dart';
-
-Widget priceDetails({
-  required int price,
-  required int tax,
-  required int serviceFee,
-  required String Function(int) formatRupiah,
-}) {
-  final total = price + tax + serviceFee;
-
-  return Column(
-    children: [
-      priceRow('Price', formatRupiah(price)),
-      const SizedBox(height: 14),
-      priceRow('Tax', formatRupiah(tax)),
-      const SizedBox(height: 14),
-      priceRow('Service Fees', formatRupiah(serviceFee)),
-      const Padding(
-        padding: EdgeInsets.symmetric(vertical: 18),
-        child: Divider(height: 1, color: Color(0xFFE0E0E0)),
-      ),
-      priceRow('Total', formatRupiah(total), isBold: true),
-    ],
-  );
-}
+import '../widgets/priceRow.dart';
+Widget buildPaymentDetails() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Detail Transaksi",
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF1B3A4A)),
+        ),
+        const SizedBox(height: 12),
+        buildDetailRow("Harga Tiket", "IDR 150.000"),
+        buildDetailRow("Biaya Layanan", "IDR 5.000"),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 8.0),
+          child: Divider(),
+        ),
+        buildDetailRow("Total Pembayaran", "IDR 155.000", isTotal: true),
+      ],
+    );
+  }
