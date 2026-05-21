@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/Pages/home_screen.dart';
+import 'package:flutter_final_project_kintkin/Pages/main_screen.dart';
 import '../Pages/payment_screen.dart';
 class PaymentFinnishButton extends StatefulWidget {
   const PaymentFinnishButton({super.key});
@@ -28,7 +29,7 @@ class _JoinButtonState extends State<PaymentFinnishButton> {
             Navigator.of(context).pop();
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const HomeScreen(),
+                builder: (context) => const MainScreen(),
                 ),
             );
           }, 
@@ -43,7 +44,7 @@ class _JoinButtonState extends State<PaymentFinnishButton> {
             ),
             alignment: Alignment.center,
             child: Text(
-              "Join Event",
+              "Confirm Payment",
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
