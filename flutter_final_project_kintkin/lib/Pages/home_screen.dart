@@ -8,7 +8,8 @@ import '../widgets/event_carousel.dart';
 
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final bool isNewRegistration; // Add this line
+  const HomeScreen({super.key, this.isNewRegistration = false});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -17,26 +18,27 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final AuthService _authService = AuthService(); // Instantiate service
   final User? _currentUser = FirebaseAuth.instance.currentUser;
-  String _userName = "Loading...";
+  String _userName = "Guest";
 
   @override
   void initState() {
     super.initState();
 
     // 1. Success Message
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_currentUser != null) {
+// ONLY show the snackbar if explicitly told they just registered!
+    if (widget.isNewRegistration && _currentUser != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Account successfully registered: ${_currentUser.email}',
+              'Account successfully registered: ${_currentUser!.email}',
             ),
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 4),
           ),
         );
-      }
-    });
+      });
+    }
 
     // 2. Fetch data via Service
     _loadProfileName();

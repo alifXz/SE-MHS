@@ -7,8 +7,7 @@ import '../theme/app_text.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/auth_logo.dart';
 import '../widgets/primary_button.dart';
-import '../widgets/LoginText.dart';
-
+import '../widgets/LoginText.dart'; // Ensure RegisterText is exported here or add its specific import if separate
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,33 +17,25 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   final _authService = AuthService();
   
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
- 
- 
   
   bool _isLoading = false;
 
   @override
-  void dispose(){
-   
+  void dispose() {
     _emailController.dispose();
-    
     _passwordController.dispose();
-    
     super.dispose();
-
-
   }
 
   Future<void> _handleLogin() async {
-
     final email = _emailController.text.trim();
     final password = _passwordController.text;
 
+    // 1. Basic Local Validation Checks
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill in all fields')),
@@ -52,22 +43,51 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
     
+    // 2. Start Network Operation
     setState(() => _isLoading = true);
-    await Future.delayed(const Duration(seconds: 1));
-    if (!mounted) return;
 
-    setState(() => _isLoading = false); 
+    try {
+      // Run the dynamic authentication service request from auth_service.dart
+      await _authService.loginWithEmailAndPassword(email, password);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Welcome back!')),
-    );
+      // --- SUCCESS PATH ---
+      if (!mounted) return;
+      setState(() => _isLoading = false); 
 
-    await Future.delayed(const Duration(milliseconds: 300));
-    if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Welcome back!')),
+      );
 
-    _goToHome();
+      // Navigate to home page
+      _goToHome();
+
+    } catch (e) {
+      // --- ERROR PATH ---
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+
+      String errorMessage = "Login failed. Please try again.";
+      final errorString = e.toString();
+
+      // Explicit validation filtering for common Firebase Auth issues
+      if (errorString.contains('user-not-found') || errorString.contains('wrong-password') || errorString.contains('invalid-credential')) {
+        errorMessage = "Invalid email or password credentials.";
+      } else if (errorString.contains('invalid-email')) {
+        errorMessage = "The email address format is invalid.";
+      } else if (errorString.contains('user-disabled')) {
+        errorMessage = "This user account has been disabled.";
+      } else if (errorString.contains('too-many-requests')) {
+        errorMessage = "Too many failed attempts. Please try again later.";
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+    }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -101,11 +121,11 @@ class _LoginScreenState extends State<LoginScreen> {
               
               const SizedBox(height: 32),
               CustomTextField(
-              label:'Password' , 
-              hintText: '.....', 
-              icon: Icons.lock_outlined,
-              controller: _passwordController,
-              obscureText: true,
+                label: 'Password', 
+                hintText: '.....', 
+                icon: Icons.lock_outlined,
+                controller: _passwordController,
+                obscureText: true,
               ),
               const SizedBox(height: 32),
               PrimaryButton(
@@ -119,18 +139,20 @@ class _LoginScreenState extends State<LoginScreen> {
             ],
           ),
         ),
-        ),
+      ),
     );
   }
 
   void _goToHome() {
-    Navigator.pushReplacement(context,
+    Navigator.pushReplacement(
+      context,
       MaterialPageRoute(builder: (_) => const MainScreen()),
     );
   }
 
   void _goToRegister() {
-    Navigator.pushReplacement(context,
+    Navigator.pushReplacement(
+      context,
       MaterialPageRoute(builder: (_) => const RegisterScreen()),
     );
   }

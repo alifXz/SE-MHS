@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_final_project_kintkin/Pages/home_screen.dart';
 import 'package:flutter_final_project_kintkin/Pages/main_screen.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text.dart';
@@ -82,6 +81,7 @@ Future<void> _handleRegister() async {
       // Always turn off loading first so the button goes back to normal if they return to this page
       if (mounted) {
         setState(() => _isLoading = false);
+        _goToMain();
       }
       
     } catch (e) {
@@ -115,7 +115,7 @@ Future<void> _handleRegister() async {
   void _goToMain(){
      Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => const MainScreen()),
+      MaterialPageRoute(builder: (_) => const MainScreen(isNewRegistration: true)),
     );
     }
 

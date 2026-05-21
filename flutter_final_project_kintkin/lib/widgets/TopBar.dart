@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'app_drawer.dart';
 
 class TopBar extends StatelessWidget {
   final String userName;

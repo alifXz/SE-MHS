@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../Pages/history_page.dart';
+import '../pages/login_screen.dart'; // Verify this path matches your file structure
+
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
 
@@ -11,9 +14,9 @@ class AppDrawer extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
-              child: const Text(
+            const Padding(
+              padding: EdgeInsets.fromLTRB(20, 24, 20, 24),
+              child: Text(
                 "Menu",
                 style: TextStyle(
                   fontSize: 22,
@@ -33,12 +36,40 @@ class AppDrawer extends StatelessWidget {
                 style: TextStyle(fontSize: 15, color: Colors.black87),
               ),
               onTap: () {
-                Navigator.of(context).pop(); // close drawer first
+                Navigator.of(context).pop();
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => const ActivityHistory(),
                   ),
                 );
+              },
+            ),
+
+            const Divider(height: 1), // Optional clean separation line
+            // Log Out (Right after History)
+            ListTile(
+              leading: const Icon(Icons.logout, color: Colors.redAccent),
+              title: const Text(
+                "Log Out",
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.redAccent,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              onTap: () async {
+                Navigator.of(context).pop(); // Close drawer
+
+                await FirebaseAuth.instance.signOut(); // Log out
+
+                if (context.mounted) {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ),
+                    (route) => false, // Clear history stack
+                  );
+                }
               },
             ),
           ],

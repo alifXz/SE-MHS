@@ -6,7 +6,9 @@ import 'schedule_screen.dart';
 
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  final bool isNewRegistration; // For the "successfully registered" snackbar
+
+  const MainScreen({super.key, this.isNewRegistration = false});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -18,14 +20,14 @@ class _MainScreenState extends State<MainScreen> {
 
  @override
   Widget build(BuildContext context) {
-  final List<Widget> _pages = [   
-    const HomeScreen(), 
+  final List<Widget> pages = [   
+    HomeScreen(isNewRegistration: widget.isNewRegistration),
     const ExploreScreen(),
     const Calendar(),
   ];
 
   return Scaffold(
-    body: IndexedStack(index: _currentIndex, children: _pages),
+    body: IndexedStack(index: _currentIndex, children: pages),
     bottomNavigationBar: Navbar(
       selectedIndex: _currentIndex,
       onTabTapped: (index) {
