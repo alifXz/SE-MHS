@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/Pages/main_screen.dart';
 import 'package:flutter_final_project_kintkin/pages/register_screen.dart';
+import 'package:flutter_final_project_kintkin/services/auth_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text.dart';
 import '../widgets/custom_text_field.dart';
@@ -17,6 +18,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
+  final _authService = AuthService();
   
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -38,21 +41,32 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _handleLogin() async {
-  setState(() => _isLoading = true);
-  await Future.delayed(const Duration(seconds: 1));
-  if (!mounted) return;
 
-  setState(() => _isLoading = false); 
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
 
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(content: Text('Welcome back!')),
-  );
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all fields')),
+      );
+      return;
+    }
+    
+    setState(() => _isLoading = true);
+    await Future.delayed(const Duration(seconds: 1));
+    if (!mounted) return;
 
-  await Future.delayed(const Duration(milliseconds: 300));
-  if (!mounted) return;
+    setState(() => _isLoading = false); 
 
-  _goToHome();
-}
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Welcome back!')),
+    );
+
+    await Future.delayed(const Duration(milliseconds: 300));
+    if (!mounted) return;
+
+    _goToHome();
+  }
 
 
   @override
@@ -90,6 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
               label:'Password' , 
               hintText: '.....', 
               icon: Icons.lock_outlined,
+              controller: _passwordController,
               obscureText: true,
               ),
               const SizedBox(height: 32),
@@ -109,13 +124,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _goToHome() {
-    Navigator.push(context,
+    Navigator.pushReplacement(context,
       MaterialPageRoute(builder: (_) => const MainScreen()),
     );
   }
 
   void _goToRegister() {
-    Navigator.push(context,
+    Navigator.pushReplacement(context,
       MaterialPageRoute(builder: (_) => const RegisterScreen()),
     );
   }
