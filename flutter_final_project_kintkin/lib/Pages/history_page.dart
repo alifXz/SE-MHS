@@ -16,7 +16,7 @@ class _ActiviryHistoryState extends State<ActivityHistory> {
       location: 'SCBD',
       time: '05:00 - 10:00',
       date: '18 May 2026 ',
-      imageUrl: "",
+      imageUrl: "https://images.unsplash.com/flagged/photo-1556746834-cbb4a38ee593?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       type: 'Sports',
     ),
     EventData(
@@ -24,7 +24,7 @@ class _ActiviryHistoryState extends State<ActivityHistory> {
       location: 'Padelton',
       time: '16:00 - 18:00',
       date: '19 May 2026',
-      imageUrl: "",
+      imageUrl: "https://images.unsplash.com/photo-1646649853703-7645147474ba?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       type: 'Sports',
     ),
   ];
