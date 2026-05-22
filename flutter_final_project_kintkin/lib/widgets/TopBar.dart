@@ -21,7 +21,7 @@ class TopBar extends StatelessWidget {
             const SizedBox(width: 12),
             Text(
               userName,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
             const Spacer(),
             IconButton(

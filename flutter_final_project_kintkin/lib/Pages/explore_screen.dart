@@ -29,7 +29,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: 15,
                     ),
                   ),
                   const Spacer(),
