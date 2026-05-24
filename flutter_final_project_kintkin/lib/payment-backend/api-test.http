@@ -1,0 +1,42 @@
+@baseUrl = http://localhost:3001/api
+
+### Health Check
+GET {{baseUrl}}/health
+
+###
+# @name InitiatePayment
+POST {{baseUrl}}/payments/initiate
+Content-Type: application/json
+
+{
+  "amount": 60000,
+  "paymentMethod": "gopay",
+  "userId": "user123",
+  "eventId": "event456"
+}
+
+###
+# @name ProcessPayment
+POST {{baseUrl}}/payments/process
+Content-Type: application/json
+
+{
+  "transactionId": "{{InitiatePayment.response.body.data.transactionId}}"
+}
+
+###
+# Get Transaction Status
+GET {{baseUrl}}/payments/550e8400-e29b-41d4-a716-446655440000
+
+###
+# Get User Transactions
+GET {{baseUrl}}/payments/user/user123
+
+###
+# Cancel Payment
+POST {{baseUrl}}/payments/550e8400-e29b-41d4-a716-446655440000/cancel
+Content-Type: application/json
+
+###
+# Get All Transactions (Admin)
+GET {{baseUrl}}/admin/transactions
