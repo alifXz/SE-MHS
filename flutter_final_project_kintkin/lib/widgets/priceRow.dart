@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-Widget buildDetailRow(String label, String value, {bool isTotal = false}) {
+
+Widget buildDetailRow(String label, int value, {bool isTotal = false}) {
+  String valueString = "IDR ${value.toString()}";
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 4.0),
-    child: Row( // <--- Sudah diganti menjadi child
+    child: Row(
+      // <--- Sudah diganti menjadi child
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
@@ -14,7 +17,7 @@ Widget buildDetailRow(String label, String value, {bool isTotal = false}) {
           ),
         ),
         Text(
-          value,
+          valueString,
           style: TextStyle(
             fontSize: isTotal ? 16 : 14,
             fontWeight: isTotal ? FontWeight.bold : FontWeight.w600,

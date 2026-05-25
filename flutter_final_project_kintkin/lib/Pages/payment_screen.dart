@@ -1,10 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/widgets/join_event_button.dart';
 import '../widgets/build_header.dart';
 import '../widgets/price_details.dart';
 import '../widgets/paymentMethod.dart';
 import '../widgets/payment_finnish_button.dart';
+
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({super.key});
 
@@ -21,14 +21,14 @@ class _PaymentScreen extends State<PaymentScreen> {
 
   int get _total => price + tax + serviceFee;
 
-   final List<Map<String, dynamic>> _paymentMethods = [
+  final List<Map<String, dynamic>> _paymentMethods = [
     {'id': 'bca', 'name': 'BCA', 'color': Color(0xFF005BAA)},
     {'id': 'gopay', 'name': 'gopay', 'color': Color(0xFF00AED6)},
     {'id': 'ovo', 'name': 'OVO', 'color': Color(0xFF4C2A86)},
     {'id': 'card', 'name': 'Credit/Debit Card', 'color': Colors.grey},
   ];
- 
-   String _formatRupiah(int amount) {
+
+  String _formatRupiah(int amount) {
     final str = amount.toString();
     final buffer = StringBuffer();
     for (int i = 0; i < str.length; i++) {
@@ -37,7 +37,7 @@ class _PaymentScreen extends State<PaymentScreen> {
     }
     return 'Rp ${buffer.toString()}';
   }
- 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,21 +54,20 @@ class _PaymentScreen extends State<PaymentScreen> {
                     const SizedBox(height: 30),
                     buildHeader(),
                     const SizedBox(height: 30),
-                     buildPaymentDetails(),
+                    buildPaymentDetails(_total),
                     const SizedBox(height: 30),
-                      PaymentMethodSection()
+                    PaymentMethodSection(),
                   ],
                 ),
               ),
             ),
-             Padding(
+            Padding(
               padding: const EdgeInsets.all(20.0),
-              child:PaymentFinnishButton() ,
+              child: PaymentFinnishButton(),
             ),
           ],
         ),
-        ),
-
+      ),
     );
   }
 }

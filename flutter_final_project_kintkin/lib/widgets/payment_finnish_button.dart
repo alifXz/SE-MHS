@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/Pages/home_screen.dart';
 import 'package:flutter_final_project_kintkin/Pages/main_screen.dart';
+import 'package:flutter_final_project_kintkin/Pages/payment_processing_screen.dart';
 import '../Pages/payment_screen.dart';
 class PaymentFinnishButton extends StatefulWidget {
   const PaymentFinnishButton({super.key});
@@ -26,10 +27,25 @@ class _JoinButtonState extends State<PaymentFinnishButton> {
           onTapUp: (_) => setState(() => _pressing = false),
           onTap: () {
             setState(() => _pressing = false);
+            
+            // Sample event data to send to backend
+            final eventData = {
+              'eventName': 'Tech Conference 2026',
+              'location': 'San Francisco, CA',
+              'time': '2:30 PM',
+              'date': '2026-05-25',
+            };
+            
+            // Process data into backend
+            // print('Processing event data: $eventData');
+            // TODO: Call backend API to process event payment with this data
+            // There is an API class inside services folder that can be used to fetch the api
+            // Example: await paymentService.processEventPayment(eventData);
+            
             Navigator.of(context).pop();
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const MainScreen(),
+                builder: (context) => const PaymentProcessingScreen(),
                 ),
             );
           }, 
