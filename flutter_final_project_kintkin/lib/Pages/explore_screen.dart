@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/explore_card.dart';
-
+import '../widgets/search_bar.dart';
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
 
@@ -11,6 +11,25 @@ class ExploreScreen extends StatefulWidget {
 
 class _ExploreScreenState extends State<ExploreScreen> {
   bool isEventsSelected = true;
+
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose(){
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _performSearch(String query) async {
+    setState(() {}); 
+
+    if (query.isEmpty) {
+      debugPrint("Search cleared. Fetching default list...");
+      return;
+    }
+
+    debugPrint("Searching Supabase for: $query");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +69,16 @@ class _ExploreScreenState extends State<ExploreScreen> {
         ),
       body: Column(
         children: [
-
+          ExploreSearchBar(
+            controller: _searchController,
+            onSearch: _performSearch,
+            onClear: () {
+              setState(() {
+                _searchController.clear();
+                _performSearch('');
+              });
+            },
+          ),
           // --- TAB TOGGLE SECTION ---
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
