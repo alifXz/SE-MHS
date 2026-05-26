@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../Pages/history_page.dart';
 import '../pages/login_screen.dart'; // Verify this path matches your file structure
-
+import '../Pages/event_screen.dart';
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
 
@@ -44,6 +44,27 @@ class AppDrawer extends StatelessWidget {
                 );
               },
             ),
+            const Divider(height: 1),
+
+            // 2. ADD YOUR NEW EVENT NAVIGATION TILE HERE
+            ListTile(
+              leading: const Icon(Icons.event, color: Colors.black54),
+              title: const Text(
+                "Events", // Change this text to whatever you want it to say in the menu
+                style: TextStyle(fontSize: 15, color: Colors.black87),
+              ),
+              onTap: () {
+                Navigator.of(context).pop(); // Closes the drawer first
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    // Make sure 'EventScreen' matches the exact class name in your event_screen.dart file
+                    builder: (context) => const CreateEventScreen(), 
+                  ),
+                );
+              },
+            ),
+
+            
 
             const Divider(height: 1), // Optional clean separation line
             // Log Out (Right after History)
