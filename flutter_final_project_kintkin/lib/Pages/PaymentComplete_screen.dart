@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/Pages/main_screen.dart';
-import 'home_screen.dart';
+import 'package:flutter_final_project_kintkin/models/event_model.dart';
+import 'package:flutter_final_project_kintkin/services/supabase_service.dart';
 
 class PaymentcompleteScreen extends StatefulWidget {
-  const PaymentcompleteScreen({super.key});
+  final EventModel event;
+
+  const PaymentcompleteScreen({
+    super.key,
+    required this.event,
+  });
 
   @override
   State<PaymentcompleteScreen> createState() => _PaymentcompleteScreenState();

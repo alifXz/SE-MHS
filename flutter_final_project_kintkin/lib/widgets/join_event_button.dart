@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import '../Pages/payment_screen.dart';
+import 'package:flutter_final_project_kintkin/models/event_model.dart';
+
 class JoinButton extends StatefulWidget {
-  const JoinButton({super.key});
+  final EventModel event;
+
+  const JoinButton({
+    super.key,
+    required this.event,
+  });
 
   @override
   State<JoinButton> createState() => _JoinButtonState();
@@ -27,7 +34,7 @@ class _JoinButtonState extends State<JoinButton> {
             Navigator.of(context).pop();
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const PaymentScreen()
+                builder: (context) => PaymentScreen(event: widget.event)
                 ),
             );
           }, 

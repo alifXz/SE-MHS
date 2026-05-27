@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'join_event_button.dart';
+import 'package:flutter_final_project_kintkin/models/event_model.dart';
 
 class EventPopupModal extends StatelessWidget {
-  const EventPopupModal({super.key});
+  final EventModel event;
 
-  static void show(BuildContext context) {
+  const EventPopupModal({
+    super.key,
+    required this.event,
+  });
+
+  static void show(
+    BuildContext context, {
+      required EventModel event
+  }) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -13,7 +22,7 @@ class EventPopupModal extends StatelessWidget {
         vsync: Navigator.of(context),
         duration: const Duration(milliseconds: 400),
       ),
-      builder: (context) => const EventPopupModal(),
+      builder: (context) => EventPopupModal(event: event),
     );
   }
 
@@ -41,7 +50,7 @@ class EventPopupModal extends StatelessWidget {
                           height: 300,
                           width: double.infinity,
                           child: Image.network(
-                            'https://images.unsplash.com/photo-1520156557489-31c63271fcd4?q=80&w=987&auto=format&fit=crop',
+                            event.imageUrl,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -95,9 +104,9 @@ class EventPopupModal extends StatelessWidget {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Expanded(
+                              Expanded(
                                 child: Text(
-                                  "Rock Climbing Meet-Up",
+                                  event.title,
                                   style: TextStyle(
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold,
@@ -126,7 +135,7 @@ class EventPopupModal extends StatelessWidget {
 
                           // Organizer
                           Row(
-                            children: const [
+                            children: [
                               CircleAvatar(
                                 radius: 16,
                                 backgroundColor: Color(0xFF4A90D9),
@@ -135,7 +144,7 @@ class EventPopupModal extends StatelessWidget {
                               ),
                               SizedBox(width: 10),
                               Text(
-                                "Bouldering Community",
+                                event.organizer,
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
@@ -146,10 +155,8 @@ class EventPopupModal extends StatelessWidget {
                           const SizedBox(height: 16),
 
                           // Description
-                          const Text(
-                            "Lorem ipsum dolor sit amet consectetur. Quam ipsum elit a placerat eu vulputate. "
-                            "At facilisis aliquet elementum nunc odio commodo. Aliquam interdum libero ut egestas "
-                            "dui gravida eu in nunc. Aenean nulla bibendum pellentesque molestie.",
+                          Text(
+                            event.description,
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.black54,
@@ -164,15 +171,15 @@ class EventPopupModal extends StatelessWidget {
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: const [
+                                  children: [
                                     _DetailRow(
                                       icon: Icons.access_time_outlined,
-                                      text: "10:00 – 15:00 WIB",
+                                      text: event.time,
                                     ),
                                     SizedBox(height: 14),
                                     _DetailRow(
                                       icon: Icons.calendar_month_outlined,
-                                      text: "Monday,\n3rd August 2026",
+                                      text: event.eventDate,
                                     ),
                                   ],
                                 ),
@@ -181,9 +188,9 @@ class EventPopupModal extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const _DetailRow(
+                                    _DetailRow(
                                       icon: Icons.location_on_outlined,
-                                      text: "Boulder Planet, Jakarta",
+                                      text: event.location,
                                     ),
                                     const SizedBox(height: 6),
                                     const Padding(
@@ -193,10 +200,10 @@ class EventPopupModal extends StatelessWidget {
                                               fontSize: 12,
                                               color: Colors.black54)),
                                     ),
-                                    const Padding(
+                                    Padding(
                                       padding: EdgeInsets.only(left: 28),
                                       child: Text(
-                                        "https://maps.app.goo.gl/uauEDrB5f3Aa61BH8",
+                                        event.locationLink,
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: Color(0xFF1565C0),
@@ -231,8 +238,8 @@ class EventPopupModal extends StatelessWidget {
                                     color: Color(0xFF4A7AB5), size: 22),
                               ),
                               const SizedBox(width: 10),
-                              const Text(
-                                "Boulder Planet Jakarta",
+                              Text(
+                                event.venuePartner,
                                 style: TextStyle(
                                     fontSize: 14, fontWeight: FontWeight.w600),
                               ),
@@ -253,7 +260,7 @@ class EventPopupModal extends StatelessWidget {
                 bottom: 0,
                 left: 0,
                 right: 0,
-                child: JoinButton(),
+                child: JoinButton(event: event),
               ),
             ],
           ),

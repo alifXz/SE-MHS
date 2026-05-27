@@ -8,7 +8,10 @@ import 'schedule_screen.dart';
 class MainScreen extends StatefulWidget {
   final bool isNewRegistration; // For the "successfully registered" snackbar
 
-  const MainScreen({super.key, this.isNewRegistration = false});
+  const MainScreen({
+    super.key,
+    this.isNewRegistration = false,
+  });
 
   @override
   State<MainScreen> createState() => _MainScreenState();

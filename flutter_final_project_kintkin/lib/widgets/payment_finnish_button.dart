@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_final_project_kintkin/Pages/home_screen.dart';
-import 'package:flutter_final_project_kintkin/Pages/main_screen.dart';
 import 'package:flutter_final_project_kintkin/Pages/payment_processing_screen.dart';
-import '../Pages/payment_screen.dart';
+import 'package:flutter_final_project_kintkin/models/event_model.dart';
+
 class PaymentFinnishButton extends StatefulWidget {
-  const PaymentFinnishButton({super.key});
+  final EventModel event;
+
+  const PaymentFinnishButton({
+    super.key,
+    required this.event,
+  });
 
   @override
   State<PaymentFinnishButton> createState() => _JoinButtonState();
@@ -45,7 +49,7 @@ class _JoinButtonState extends State<PaymentFinnishButton> {
             Navigator.of(context).pop();
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const PaymentProcessingScreen(),
+                builder: (context) => PaymentProcessingScreen(event: widget.event),
                 ),
             );
           }, 

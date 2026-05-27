@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_final_project_kintkin/services/event_service.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/explore_card.dart';
 import '../widgets/search_bar.dart';
+
 class ExploreScreen extends StatefulWidget {
+
   const ExploreScreen({super.key});
 
   @override
@@ -132,11 +135,24 @@ class _ExploreScreenState extends State<ExploreScreen> {
           
           // --- DYNAMIC LIST SECTION ---
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(20),
-              itemCount: 3,
-              itemBuilder: (context, index) {
-                return ExploreCard(isCommunity: !isEventsSelected);
+            child: FutureBuilder(
+              future: EventService().getEvents(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                final events = snapshot.data!;
+
+                return ListView.builder(
+                  padding: const EdgeInsets.all(20),
+                  itemCount: events.length,
+                  itemBuilder: (context, index) {
+                    final event = events[index];
+
+                    return ExploreCard(isCommunity: !isEventsSelected, event: event);
+                  }
+                );
               },
             ),
           ),

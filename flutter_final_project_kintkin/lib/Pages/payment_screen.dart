@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_final_project_kintkin/widgets/join_event_button.dart';
 import '../widgets/build_header.dart';
 import '../widgets/price_details.dart';
 import '../widgets/paymentMethod.dart';
 import '../widgets/payment_finnish_button.dart';
+import 'package:flutter_final_project_kintkin/models/event_model.dart';
 
 class PaymentScreen extends StatefulWidget {
-  const PaymentScreen({super.key});
+  final EventModel event;
+
+  const PaymentScreen({
+    super.key,
+    required this.event,
+  });
 
   @override
   State<PaymentScreen> createState() => _PaymentScreen();
@@ -54,7 +59,7 @@ class _PaymentScreen extends State<PaymentScreen> {
                     const SizedBox(height: 30),
                     buildHeader(),
                     const SizedBox(height: 30),
-                    buildPaymentDetails(_total),
+                    buildPaymentDetails(widget.event),
                     const SizedBox(height: 30),
                     PaymentMethodSection(),
                   ],
@@ -63,7 +68,7 @@ class _PaymentScreen extends State<PaymentScreen> {
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
-              child: PaymentFinnishButton(),
+              child: PaymentFinnishButton(event: widget.event),
             ),
           ],
         ),

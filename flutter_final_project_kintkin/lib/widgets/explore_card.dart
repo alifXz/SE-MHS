@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'event_popup_modal.dart';
+import 'package:flutter_final_project_kintkin/models/event_model.dart';
 
 class ExploreCard extends StatelessWidget {
   final bool isCommunity;
+  final EventModel event;
 
-  const ExploreCard({super.key, required this.isCommunity});
+  const ExploreCard({
+    super.key, 
+    required this.isCommunity,
+    required this.event,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +20,7 @@ class ExploreCard extends StatelessWidget {
   //Event Cards
   Widget _buildEventCard(BuildContext context) {
     return GestureDetector(
-    onTap: () => EventPopupModal.show(context),
+    onTap: () => EventPopupModal.show(context, event: event),
     child: Container(
       margin: const EdgeInsets.only(bottom: 16),
       height: 180,
@@ -40,7 +46,7 @@ class ExploreCard extends StatelessWidget {
                 width: 130,
                 height: double.infinity,
                 child: Image.network(
-                  'https://images.unsplash.com/photo-1520156557489-31c63271fcd4?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                  event.imageUrl,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -58,7 +64,7 @@ class ExploreCard extends StatelessWidget {
                     children: [
                       // Organizer row
                       Row(
-                        children: const [
+                        children: [
                           CircleAvatar(
                             radius: 14,
                             backgroundColor: Color(0xFF4A90D9),
@@ -67,7 +73,7 @@ class ExploreCard extends StatelessWidget {
                           SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              "Bouldering Community",
+                              event.organizer,
                               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -75,24 +81,24 @@ class ExploreCard extends StatelessWidget {
                         ],
                       ),
                       const Spacer(),
-                      const Text(
-                        "Rock Climbing\nMeet Up",
+                      Text(
+                        event.title,
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, height: 1.2),
                       ),
                       const SizedBox(height: 8),
                       Row(
-                        children: const [
+                        children: [
                           Icon(Icons.location_on_outlined, size: 14, color: Colors.grey),
                           SizedBox(width: 4),
-                          Text("Boulder Planet, Jakarta", style: TextStyle(fontSize: 12, color: Colors.grey)),
+                          Text(event.location, style: TextStyle(fontSize: 12, color: Colors.grey)),
                         ],
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       Row(
-                        children: const [
+                        children: [
                           Icon(Icons.access_time_outlined, size: 14, color: Colors.grey),
                           SizedBox(width: 4),
-                          Text("10:00 – 15:00 WIB", style: TextStyle(fontSize: 12, color: Colors.grey)),
+                          Text(event.time, style: TextStyle(fontSize: 12, color: Colors.grey)),
                         ],
                       ),
                     ],
