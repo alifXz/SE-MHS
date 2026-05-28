@@ -19,4 +19,37 @@ class SupabaseService {
       'payment_status': 'paid',
     });
   }
+
+  Future<void> createEvent({
+    required String title,
+    required String organizer,
+    required String location,
+    required String locationLink,
+    required String description,
+    required String imageUrl,
+    required String time,
+    required String eventDate,
+    required String venuePartner,
+    required int price,
+  }) async {
+
+    final user = supabase.auth.currentUser;
+
+    if (user == null) {
+      throw Exception('User not logged in');
+    }
+
+    await supabase.from('events').insert({
+      'title': title,
+      'organizer': organizer,
+      'location': location,
+      'location_link': locationLink,
+      'description': description,
+      'image_url': imageUrl,
+      'time': time,
+      'event_date': eventDate,
+      'venue_partner': venuePartner,
+      'price': price,
+    });
+  }
 }

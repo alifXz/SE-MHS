@@ -8,6 +8,7 @@ class EventName extends StatelessWidget {
   final int maxLines;
   final VoidCallback? onTap;
   final bool readOnly;
+  final TextInputType? keyboardType;
 
   const EventName({
     super.key,
@@ -18,6 +19,7 @@ class EventName extends StatelessWidget {
     this.maxLines = 1,
     this.onTap,
     this.readOnly = false,
+    this.keyboardType,
     });
 
   @override
@@ -38,6 +40,7 @@ class EventName extends StatelessWidget {
           const SizedBox(height: 8),
           TextField(
             controller: controller,
+            keyboardType: keyboardType,
             maxLines: maxLines,
             readOnly: readOnly,
             onTap: onTap,
