@@ -144,7 +144,7 @@ class BasicCard extends StatelessWidget {
             const SizedBox(height: 8),
             _infoRow(Icons.location_on_outlined, event.location),
             const SizedBox(height: 3),
-            _infoRow(Icons.access_time_outlined, "${event.startTime} - ${event.endTime}"),
+            _infoRow(Icons.access_time_outlined, "${event.startTime.substring(0, 5)}" " - " "${event.endTime.substring(0, 5)}"),
             const SizedBox(height: 3),
             _infoRow(Icons.calendar_month_outlined, event.eventDate),
           ],
