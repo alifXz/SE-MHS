@@ -174,7 +174,7 @@ class EventPopupModal extends StatelessWidget {
                                   children: [
                                     _DetailRow(
                                       icon: Icons.access_time_outlined,
-                                      text: event.time,
+                                      text: "${event.startTime} - ${event.endTime}",
                                     ),
                                     SizedBox(height: 14),
                                     _DetailRow(

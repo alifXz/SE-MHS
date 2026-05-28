@@ -24,7 +24,9 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
 
   final TextEditingController _mapsLinkController = TextEditingController();
 
-  final TextEditingController _timeController = TextEditingController();
+  final TextEditingController _startTimeController = TextEditingController();
+
+  final TextEditingController _endTimeController = TextEditingController();
 
   final TextEditingController _dateController = TextEditingController();
 
@@ -37,6 +39,26 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   final TextEditingController _priceController = TextEditingController();
 
   bool _isLoading = false;
+
+  Future<void> _selectTime(
+    BuildContext context,
+    TextEditingController controller,
+  ) async {
+
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    if (picked != null) {
+
+      final hour = picked.hour.toString().padLeft(2, '0');
+
+      final minute = picked.minute.toString().padLeft(2, '0');
+
+      controller.text = "$hour:$minute";
+    }
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -76,7 +98,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     if (_eventNameController.text.trim().isEmpty ||
         _descriptionController.text.trim().isEmpty ||
         _mapsLinkController.text.trim().isEmpty ||
-        _timeController.text.trim().isEmpty ||
+        _startTimeController.text.trim().isEmpty ||
+        _endTimeController.text.trim().isEmpty ||
         _dateController.text.trim().isEmpty ||
         _organizerController.text.trim().isEmpty ||
         _imageUrlController.text.trim().isEmpty ||
@@ -107,7 +130,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
         locationLink: _mapsLinkController.text.trim(),
         description: _descriptionController.text.trim(),
         imageUrl: _imageUrlController.text.trim(),
-        time: _timeController.text.trim(),
+        startTime: _startTimeController.text.trim(),
+        endTime: _endTimeController.text.trim(),
         eventDate: _dateController.text.trim(),
         venuePartner: _venuePartnerController.text.trim(),
         price: int.parse(_priceController.text.trim()),
@@ -150,7 +174,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     _eventNameController.dispose();
     _descriptionController.dispose();
     _mapsLinkController.dispose();
-    _timeController.dispose();
+    _startTimeController.dispose();
+    _endTimeController.dispose();
     _dateController.dispose();
     _organizerController.dispose();
     _imageUrlController.dispose();
@@ -265,12 +290,24 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 suffixIcon: Icons.map_outlined,
               ),
 
-              // TIME
+              // START TIME
               EventName(
-                label: 'Time',
-                hintText: '12 : 00',
-                controller: _timeController,
+                label: 'Start Time',
+                hintText: 'Select start time',
+                controller: _startTimeController,
                 suffixIcon: Icons.access_time,
+                readOnly: true,
+                onTap: () => _selectTime(context, _startTimeController),
+              ),
+
+              // END TIME
+              EventName(
+                label: 'End Time',
+                hintText: 'Select end time',
+                controller: _endTimeController,
+                suffixIcon: Icons.access_time,
+                readOnly: true,
+                onTap: () => _selectTime(context, _endTimeController),
               ),
 
               // DATE

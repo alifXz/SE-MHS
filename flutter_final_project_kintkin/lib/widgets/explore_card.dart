@@ -98,7 +98,7 @@ class ExploreCard extends StatelessWidget {
                         children: [
                           Icon(Icons.access_time_outlined, size: 14, color: Colors.grey),
                           SizedBox(width: 4),
-                          Text(event.time, style: TextStyle(fontSize: 12, color: Colors.grey)),
+                          Text("${event.startTime} - ${event.endTime}", style: TextStyle(fontSize: 12, color: Colors.grey)),
                         ],
                       ),
                     ],

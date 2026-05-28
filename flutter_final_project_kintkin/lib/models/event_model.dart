@@ -6,7 +6,8 @@ class EventModel {
   final String locationLink;
   final String description;
   final String imageUrl;
-  final String time;
+  final String startTime;
+  final String endTime;
   final String eventDate;
   final String venuePartner;
   final int price;
@@ -19,7 +20,8 @@ class EventModel {
     required this.locationLink,
     required this.description,
     required this.imageUrl,
-    required this.time,
+    required this.startTime,
+    required this.endTime,
     required this.eventDate,
     required this.venuePartner,
     required this.price,
@@ -34,7 +36,8 @@ class EventModel {
       locationLink: json['location_link'],
       description: json['description'],
       imageUrl: json['image_url'],
-      time: json['time'],
+      startTime: json['start_time'] ?? '',
+      endTime: json['end_time'] ?? '',
       eventDate: json ['event_date'],
       venuePartner: json['venue_partner'],
       price: json['price'] is int? json['price']: int.parse(json['price'].toString()),

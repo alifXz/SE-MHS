@@ -3,16 +3,18 @@ import 'package:flutter/material.dart';
 class EventData {
   final String title;
   final String location;
-  final String time;
-  final String date;
+  final String startTime;
+  final String endTime;
+  final String eventDate;
   final String imageUrl;
   final String type;
 
   EventData({
     required this.title,
     required this.location,
-    required this.time,
-    required this.date,
+    required this.startTime,
+    required this.endTime,
+    required this.eventDate,
     required this.imageUrl,
     required this.type,
   });
@@ -142,9 +144,9 @@ class BasicCard extends StatelessWidget {
             const SizedBox(height: 8),
             _infoRow(Icons.location_on_outlined, event.location),
             const SizedBox(height: 3),
-            _infoRow(Icons.access_time_outlined, event.time),
+            _infoRow(Icons.access_time_outlined, "${event.startTime} - ${event.endTime}"),
             const SizedBox(height: 3),
-            _infoRow(Icons.calendar_month_outlined, event.date),
+            _infoRow(Icons.calendar_month_outlined, event.eventDate),
           ],
         ),
       ),
