@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/Pages/main_screen.dart';
 import 'package:flutter_final_project_kintkin/pages/register_screen.dart';
 import 'package:flutter_final_project_kintkin/services/auth_service.dart';
+
 import '../theme/app_colors.dart';
 import '../theme/app_text.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/auth_logo.dart';
 import '../widgets/primary_button.dart';
-import '../widgets/LoginText.dart'; // Ensure RegisterText is exported here or add its specific import if separate
+import '../widgets/LoginText.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,10 +19,10 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _authService = AuthService();
-  
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  
+
   bool _isLoading = false;
 
   @override
@@ -35,54 +36,45 @@ class _LoginScreenState extends State<LoginScreen> {
     final email = _emailController.text.trim();
     final password = _passwordController.text;
 
-    // 1. Basic Local Validation Checks
+    // Validation
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all fields')),
+        const SnackBar(
+          content: Text('Please fill in all fields'),
+        ),
       );
       return;
     }
-    
-    // 2. Start Network Operation
+
     setState(() => _isLoading = true);
 
     try {
-      // Run the dynamic authentication service request from auth_service.dart
-      await _authService.loginWithEmailAndPassword(email, password);
-
-      // --- SUCCESS PATH ---
-      if (!mounted) return;
-      setState(() => _isLoading = false); 
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Welcome back!')),
+      // Supabase Login
+      await _authService.signIn(
+        email: email,
+        password: password,
       );
 
-      // Navigate to home page
+      if (!mounted) return;
+
+      setState(() => _isLoading = false);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Welcome back!'),
+        ),
+      );
+
       _goToHome();
 
     } catch (e) {
-      // --- ERROR PATH ---
       if (!mounted) return;
+
       setState(() => _isLoading = false);
-
-      String errorMessage = "Login failed. Please try again.";
-      final errorString = e.toString();
-
-      // Explicit validation filtering for common Firebase Auth issues
-      if (errorString.contains('user-not-found') || errorString.contains('wrong-password') || errorString.contains('invalid-credential')) {
-        errorMessage = "Invalid email or password credentials.";
-      } else if (errorString.contains('invalid-email')) {
-        errorMessage = "The email address format is invalid.";
-      } else if (errorString.contains('user-disabled')) {
-        errorMessage = "This user account has been disabled.";
-      } else if (errorString.contains('too-many-requests')) {
-        errorMessage = "Too many failed attempts. Please try again later.";
-      }
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(errorMessage),
+          content: Text(e.toString()),
           backgroundColor: Colors.redAccent,
         ),
       );
@@ -95,22 +87,34 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 24,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 28),
+
               const AuthLogo(),
+
               const SizedBox(height: 28),
-              Text('Welcome Back!', style: AppTextStyles.heading),
+
+              Text(
+                'Welcome Back!',
+                style: AppTextStyles.heading,
+              ),
+
               const SizedBox(height: 8),
+
               Text(
                 'Log in to continue to your account.',
                 style: AppTextStyles.subtitle,
                 textAlign: TextAlign.center,
               ),
-              
+
               const SizedBox(height: 32),
+
               CustomTextField(
                 label: 'Email Address',
                 hintText: 'aaa@gmail.com',
@@ -118,24 +122,31 @@ class _LoginScreenState extends State<LoginScreen> {
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
               ),
-              
+
               const SizedBox(height: 32),
+
               CustomTextField(
-                label: 'Password', 
-                hintText: '.....', 
+                label: 'Password',
+                hintText: '.....',
                 icon: Icons.lock_outlined,
                 controller: _passwordController,
                 obscureText: true,
               ),
+
               const SizedBox(height: 32),
+
               PrimaryButton(
                 text: 'Login',
                 onPressed: _handleLogin,
                 isLoading: _isLoading,
                 textColor: Colors.white,
               ),
+
               const SizedBox(height: 24),
-              RegisterText(onTap: _goToRegister)
+
+              RegisterText(
+                onTap: _goToRegister,
+              ),
             ],
           ),
         ),
@@ -146,14 +157,18 @@ class _LoginScreenState extends State<LoginScreen> {
   void _goToHome() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => const MainScreen()),
+      MaterialPageRoute(
+        builder: (_) => const MainScreen(),
+      ),
     );
   }
 
   void _goToRegister() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => const RegisterScreen()),
+      MaterialPageRoute(
+        builder: (_) => const RegisterScreen(),
+      ),
     );
   }
 }

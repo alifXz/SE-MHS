@@ -1,29 +1,35 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/Pages/main_screen.dart';
 import 'package:flutter_final_project_kintkin/Pages/register_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
+    return StreamBuilder<AuthState>(
+      stream: Supabase.instance.client.auth.onAuthStateChange,
       builder: (context, snapshot) {
-        // If Firebase is still validating the session token, show a loading spinner
+
+        // Loading state
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
           );
         }
 
-        // If a user session exists, send them straight into the App Home
-        if (snapshot.hasData) {
+        // Current logged in user
+        final session = snapshot.data?.session;
+
+        // User already logged in
+        if (session != null) {
           return const MainScreen();
         }
 
-        // Otherwise, they are unauthenticated—show them the Register Screen
+        // User not logged in
         return const RegisterScreen();
       },
     );

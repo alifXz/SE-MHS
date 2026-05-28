@@ -1,80 +1,61 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final supabase = Supabase.instance.client;
 
-  // 1. REGISTER METHOD
-  Future<User?> registerWithEmailAndPassword({
+  Future<void> signUp({
     required String name,
     required String email,
     required String password,
     required int age,
     required String phoneNumber,
   }) async {
-    try {
-      // 1. Create user in Firebase Auth
-      UserCredential result = await _auth.createUserWithEmailAndPassword(
-        email: email.trim(),
-        password: password,
-      );
-      User? user = result.user;
 
-      // 2. Save the extra metadata fields to Firestore matching your ERD
-      if (user != null) {
-        await _firestore.collection('users').doc(user.uid).set({
-          'userId': user.uid,
-          'name': name.trim(),
-          'email': email.trim(),
-          'age': age,
-          'phoneNumber': phoneNumber.trim(),
-          'role': 'member', // default fallback role
-          'joinedAt': FieldValue.serverTimestamp(),
-        });
-      }
-      return user;
-    } catch (e) {
-      print("Firebase Registration Error: $e");
-      rethrow; // Forward it to the UI to handle and show an error dialog/snackbar
+    final response = await supabase.auth.signUp(
+      email: email,
+      password: password,
+    );
+
+    final user = response.user;
+
+    if (user == null) {
+      throw Exception('User creation failed');
     }
+
+    await supabase.from('users').insert({
+      'id': user.id,
+      'name': name,
+      'email': email,
+      'age': age,
+      'phone_number': phoneNumber,
+    });
   }
 
-
-  // 2. LOGIN METHOD
-  Future<User?> loginWithEmailAndPassword(String email, String password) async {
-    try {
-      UserCredential result = await _auth.signInWithEmailAndPassword(
-        email: email.trim(),
-        password: password,
-      );
-      return result.user;
-    } catch (e) {
-      print("Login Error: ${e.toString()}");
-      rethrow;
-    }
+  Future<void> signIn({
+    required String email,
+    required String password,
+  }) async {
+    await supabase.auth.signInWithPassword(
+      email: email,
+      password: password,
+    );
   }
 
-  // 3. LOGOUT METHOD
   Future<void> signOut() async {
-    await _auth.signOut();
+    await supabase.auth.signOut();
   }
 
-  Future<String> getUserName(String uid) async {
-    try {
-      DocumentSnapshot doc = await _firestore
-          .collection('users')
-          .doc(uid)
-          .get();
-      if (doc.exists && doc.data() != null) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        return data['name'] ?? "User";
-      }
-      return "User";
-    } catch (e) {
-      print("Error in getUserName service: $e");
-      return "User"; // Fallback name
-    }
+  User? getCurrentUser() {
+    return supabase.auth.currentUser;
+  }
+
+  Future<String> getUserName(String userId) async {
+    final response = await supabase
+        .from('users')
+        .select('name')
+        .eq('id', userId)
+        .single();
+
+    return response['name'] ?? 'Guest';
   }
 }
-

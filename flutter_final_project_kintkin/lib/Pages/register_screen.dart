@@ -8,6 +8,7 @@ import '../widgets/primary_button.dart';
 import '../widgets/LoginText.dart';
 import '../services/auth_service.dart';
 import 'login_screen.dart';
+
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
@@ -16,7 +17,6 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  // Authentication service layer instance
   final AuthService _authService = AuthService();
 
   final _ageController = TextEditingController();
@@ -29,7 +29,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _isLoading = false;
 
   @override
-  void dispose(){
+  void dispose() {
     _nameController.dispose();
     _emailController.dispose();
     _ageController.dispose();
@@ -37,70 +37,72 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _confirmPasswordController.dispose();
     _phoneNumberController.dispose();
     super.dispose();
-
-
   }
 
-// HANDLE REGISTER ///////////////////////////////
-
-Future<void> _handleRegister() async {
-    // 1. Basic Local Validation Checks
+  Future<void> _handleRegister() async {
+    // Basic validation
     if (_nameController.text.trim().isEmpty ||
         _emailController.text.trim().isEmpty ||
         _passwordController.text.isEmpty ||
+        _confirmPasswordController.text.isEmpty ||
         _ageController.text.trim().isEmpty ||
         _phoneNumberController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill out all fields')),
+        const SnackBar(
+          content: Text('Please fill out all fields'),
+        ),
       );
       return;
     }
 
     if (_passwordController.text != _confirmPasswordController.text) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Passwords do not match'),
+        ),
+      );
       return;
     }
 
-    // 2. Start Network Operation
     setState(() => _isLoading = true);
 
     try {
-      // Run the dynamic authentication service request
-      await _authService.registerWithEmailAndPassword(
-        name: _nameController.text,
-        email: _emailController.text,
-        password: _passwordController.text,
-        age: int.tryParse(_ageController.text.trim()) ?? 0,
-        phoneNumber: _phoneNumberController.text,
+      await _authService.signUp(
+        name: _nameController.text.trim(),
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+        age: int.parse(_ageController.text.trim()),
+        phoneNumber: _phoneNumberController.text.trim(),
       );
 
-      // --- SUCCESS PATH ---
-
-      // Always turn off loading first so the button goes back to normal if they return to this page
-      if (mounted) {
-        setState(() => _isLoading = false);
-        _goToMain();
-      }
-      
-    } catch (e) {
-      // --- ERROR PATH ---
       if (!mounted) return;
 
-      // Turn off loading because an error occurred
       setState(() => _isLoading = false);
 
-      String errorMessage = "Registration failed. Please try again.";
-      final errorString = e.toString();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Registration successful!'),
+        ),
+      );
 
-      if (errorString.contains('email-already-in-use')) {
-        errorMessage =
-            "This email address is already in use by another account.";
-      } else if (errorString.contains('weak-password')) {
-        errorMessage = "The password provided is too weak.";
-      } else if (errorString.contains('invalid-email')) {
-        errorMessage = "The email address is badly formatted.";
+      _goToMain();
+
+    } catch (e) {
+      if (!mounted) return;
+
+      setState(() => _isLoading = false);
+
+      String errorMessage = 'Registration failed';
+
+      final error = e.toString();
+
+      // error validations
+      if (error.contains('User already registered')) {
+        errorMessage = 'Email is already registered';
+      } else if (error.contains('Password should be at least')) {
+        errorMessage = 'Password is too weak';
+      } else if (error.contains('Invalid email')) {
+        errorMessage = 'Invalid email format';
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -112,17 +114,23 @@ Future<void> _handleRegister() async {
     }
   }
 
-  void _goToMain(){
-     Navigator.pushReplacement(
+  void _goToMain() {
+    Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => const MainScreen(isNewRegistration: true)),
+      MaterialPageRoute(
+        builder: (_) => const MainScreen(
+          isNewRegistration: true,
+        ),
+      ),
     );
-    }
+  }
 
   void _goToLogin() {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => const LoginScreen()),
+      MaterialPageRoute(
+        builder: (_) => const LoginScreen(),
+      ),
     );
   }
 
@@ -132,53 +140,73 @@ Future<void> _handleRegister() async {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 24,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 20),
+
               const AuthLogo(),
+
               const SizedBox(height: 28),
-              Text('Create Account', style: AppTextStyles.heading),
-              const SizedBox(height: 8),
+
               Text(
-                'Sign up to get started. ',
+                'Create Account',
+                style: AppTextStyles.heading,
+              ),
+
+              const SizedBox(height: 8),
+
+              Text(
+                'Sign up to get started.',
                 style: AppTextStyles.subtitle,
                 textAlign: TextAlign.center,
               ),
-              
+
               const SizedBox(height: 20),
-              CustomTextField(label: 'Name', 
-              hintText: 'Name', 
-              icon: Icons.person_outline,
-              controller: _nameController,
-              keyboardType:TextInputType.name
-              ) ,
-            const SizedBox(height: 20,),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: CustomTextField(
-                label:'Age' ,
-                hintText: 'age', 
-                icon: Icons.numbers_outlined,
-                controller: _ageController,
-                keyboardType: TextInputType.number,
-                ),
-                ),
-              const SizedBox(width:  5),
-              Expanded(child: 
+
               CustomTextField(
-                label: 'Phone Number',
-                hintText: '+62 812 9938 9987',
-                icon: Icons.phone_android_outlined,
-                controller: _phoneNumberController,
-                keyboardType: TextInputType.phone,
+                label: 'Name',
+                hintText: 'Name',
+                icon: Icons.person_outline,
+                controller: _nameController,
+                keyboardType: TextInputType.name,
               ),
-              ),
-              ],
-            ),
+
               const SizedBox(height: 20),
+
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: CustomTextField(
+                      label: 'Age',
+                      hintText: 'Age',
+                      icon: Icons.numbers_outlined,
+                      controller: _ageController,
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+
+                  const SizedBox(width: 5),
+
+                  Expanded(
+                    child: CustomTextField(
+                      label: 'Phone Number',
+                      hintText: '+62 812 9938 9987',
+                      icon: Icons.phone_android_outlined,
+                      controller: _phoneNumberController,
+                      keyboardType: TextInputType.phone,
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 20),
+
               CustomTextField(
                 label: 'Email Address',
                 hintText: 'aaa@gmail.com',
@@ -186,36 +214,45 @@ Future<void> _handleRegister() async {
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
               ),
-              
+
               const SizedBox(height: 20),
+
               CustomTextField(
-              label:'Password' , 
-              hintText: '.....', 
-              icon: Icons.lock_outlined,
-              controller: _passwordController,
-              obscureText: true,
+                label: 'Password',
+                hintText: '.....',
+                icon: Icons.lock_outlined,
+                controller: _passwordController,
+                obscureText: true,
               ),
+
               const SizedBox(height: 20),
+
               CustomTextField(
-              label:'Re-Enter Password' , 
-              hintText: '.....', 
-              icon: Icons.lock_outlined,
-              controller: _confirmPasswordController,
-              obscureText: true,
+                label: 'Re-Enter Password',
+                hintText: '.....',
+                icon: Icons.lock_outlined,
+                controller: _confirmPasswordController,
+                obscureText: true,
               ),
+
               const SizedBox(height: 32),
+
               PrimaryButton(
                 text: 'Sign Up',
-                onPressed: () => _handleRegister(),
+                onPressed: _handleRegister,
                 isLoading: _isLoading,
                 textColor: Colors.white,
               ),
+
               const SizedBox(height: 24),
-              LoginText(onTap: _goToLogin)
+
+              LoginText(
+                onTap: _goToLogin,
+              ),
             ],
           ),
         ),
-        ),
+      ),
     );
   }
 }

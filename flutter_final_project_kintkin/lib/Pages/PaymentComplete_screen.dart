@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/Pages/main_screen.dart';
 import 'package:flutter_final_project_kintkin/models/event_model.dart';
-import 'package:flutter_final_project_kintkin/services/supabase_service.dart';
 
 class PaymentcompleteScreen extends StatefulWidget {
   final EventModel event;
