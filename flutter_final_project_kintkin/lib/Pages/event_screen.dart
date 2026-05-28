@@ -22,6 +22,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
 
   final TextEditingController _descriptionController = TextEditingController();
 
+  final TextEditingController _locationController = TextEditingController();
+
   final TextEditingController _mapsLinkController = TextEditingController();
 
   final TextEditingController _startTimeController = TextEditingController();
@@ -97,6 +99,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     // validation
     if (_eventNameController.text.trim().isEmpty ||
         _descriptionController.text.trim().isEmpty ||
+        _locationController.text.trim().isEmpty ||
         _mapsLinkController.text.trim().isEmpty ||
         _startTimeController.text.trim().isEmpty ||
         _endTimeController.text.trim().isEmpty ||
@@ -126,7 +129,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
       await SupabaseService().createEvent(
         title: _eventNameController.text.trim(),
         organizer: _organizerController.text.trim(),
-        location: _mapsLinkController.text.trim(),
+        location: _locationController.text.trim(),
         locationLink: _mapsLinkController.text.trim(),
         description: _descriptionController.text.trim(),
         imageUrl: _imageUrlController.text.trim(),
@@ -173,6 +176,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   void dispose() {
     _eventNameController.dispose();
     _descriptionController.dispose();
+    _locationController.dispose();
     _mapsLinkController.dispose();
     _startTimeController.dispose();
     _endTimeController.dispose();
@@ -282,7 +286,14 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 },
               ),
 
-              // LOCATION
+              // LOCATION NAME
+              EventName(
+                label: 'Location',
+                hintText: 'BINUS Alam Sutera',
+                controller: _locationController,
+              ),
+
+              // LOCATION LINK
               EventName(
                 label: 'Location Link',
                 hintText: 'Paste Google Maps link here',
