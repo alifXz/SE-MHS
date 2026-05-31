@@ -195,7 +195,12 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
 
+
       body: SafeArea(
+        
+      
+
+
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(
             horizontal: 30,
@@ -203,10 +208,32 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
           ),
 
           child: Column(
+            
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-
+    
               const SizedBox(height: 20),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Positioned(
+                          top: 20,
+                          left: 16,
+                          child: SafeArea(
+                            child: GestureDetector(
+                              onTap: () => Navigator.of(context).pop(),
+                              child: Container(
+                                width: 42,
+                                height: 42,
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFF1B4F6B),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(Icons.arrow_back, color: Colors.white, size: 22),
+                              ),
+                            ),
+                          ),
+                        ),
+              ),
 
               const AuthLogo(),
 

@@ -64,7 +64,7 @@ class AppDrawer extends StatelessWidget {
                 color: Colors.black54,
               ),
               title: const Text(
-                "Events",
+                "Create Event",
                 style: TextStyle(
                   fontSize: 15,
                   color: Colors.black87,

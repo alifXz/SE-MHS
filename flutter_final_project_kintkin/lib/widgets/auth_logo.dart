@@ -13,14 +13,6 @@ class AuthLogo extends StatelessWidget {
           fit: BoxFit.contain,
         ),
         const SizedBox(height: 4),
-        const Text(
-          '-Kith & Kin',
-          style: TextStyle(
-            fontSize: 11,
-            color: Colors.grey,
-            letterSpacing: 1.5,
-          ),
-        ),
       ],
     );
   }

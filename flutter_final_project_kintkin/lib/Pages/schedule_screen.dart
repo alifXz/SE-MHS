@@ -87,60 +87,86 @@ class _CalendarState extends State<Calendar>{
         ),
       body: Column(
        children: [
-          TableCalendar(
-            focusedDay: _focusedDay,
-            firstDay: DateTime.utc(2025, 1, 1),
-            lastDay: DateTime(2030, 12, 31),
-
-            eventLoader: _getEventsForDay,
-
-            calendarBuilders: CalendarBuilders(
-              markerBuilder: (context, day, events) {
-                if (events.isEmpty) return null;
-
-                return Positioned(
-                  bottom: -2,
-                  child: Container(
-                    width: 7,
-                    height: 7,
-                    decoration: const BoxDecoration(
-                      color: Colors.black,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                );
-              },
+          Container(
+              padding: EdgeInsets.all(5),
+              child: TableCalendar(
+                      rowHeight: 48,
+                      focusedDay: _focusedDay,
+                      firstDay: DateTime.utc(2025, 1, 1),
+                      lastDay: DateTime(2030, 12, 31),
+                      eventLoader: _getEventsForDay,
+                      calendarStyle: CalendarStyle(
+                  
+                        // Remove today's background circle
+                        todayDecoration: BoxDecoration(
+                          color: Colors.transparent, // no background
+                          shape: BoxShape.circle,
+                  
+                        ),
+                        // Just change the text color instead
+                        todayTextStyle: TextStyle(
+                          color: const Color.fromARGB(255, 61, 153, 203),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        
+                        // keep your other styles...
+                        selectedDecoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 253, 182, 59),
+                          shape: BoxShape.circle,
+                        ),
+                        selectedTextStyle: TextStyle(color: Colors.white),
+                        cellMargin: EdgeInsets.only(top: 10,bottom: 10,left: 8,right: 8),
+                      ),
+                      calendarBuilders: CalendarBuilders(
+                        markerBuilder: (context, day, events) {
+                          if (events.isEmpty) return null;
+                          return Container(
+                            margin: EdgeInsets.only(top: 4),
+                            width: 7,
+                            height: 7,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              shape: BoxShape.circle,
+                            ),
+                          );
+                        },
+                      ),
+                selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                onDaySelected: (selectedDay, focusedDay) {
+                  setState(() {
+                    _selectedDay = selectedDay;
+                    _focusedDay = focusedDay;
+                  });
+                },
+                onPageChanged: (focusedDay) {
+                  _focusedDay = focusedDay;
+                },
+              ),
             ),
 
-            selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-            onDaySelected: (selectedDay, focusedDay) {
-              setState(() {
-                _selectedDay = selectedDay;
-                _focusedDay = focusedDay;
-              });
-            },
-            onPageChanged: (focusedDay) {
-              _focusedDay = focusedDay;
-            },
-          ),
-
+          SizedBox(height: 50),
           Expanded(
             child: _loading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : events.isEmpty
                 ? const Center(
-                    child: CircularProgressIndicator(),
+                    child: Text('No activities planned'),
                   )
-                : events.isEmpty
-                  ? const Center(
-                      child: Text('No activities planned'),
-                    )
-                  : ListView.builder(
+                : ListView.builder(
                     itemCount: events.length,
-                    itemBuilder: (context, index) => SizedBox(
-                      height: 280,
-                      child: BasicCard(event: events[index]),
-                    ),
+                    itemBuilder: (context, index) => Center( // add this
+                      child: ConstrainedBox( // add this
+                        constraints: BoxConstraints(maxWidth: 1000), // add this
+                        child: SizedBox(
+                          height: 280,
+                          child: BasicCard(event: events[index]),
+                        ),
+                      ), // close ConstrainedBox
+                    ), // close Center
                   ),
-            ),
+          ),
         ],
       ),
     );
