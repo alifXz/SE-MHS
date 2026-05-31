@@ -32,28 +32,28 @@ class AppDrawer extends StatelessWidget {
             const Divider(height: 1),
 
             // Activity History
-            ListTile(
-              leading: const Icon(
-                Icons.history,
-                color: Colors.black54,
-              ),
-              title: const Text(
-                "Activity History",
-                style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.black87,
-                ),
-              ),
-              onTap: () {
-                Navigator.of(context).pop();
+            // ListTile(
+            //   leading: const Icon(
+            //     Icons.history,
+            //     color: Colors.black54,
+            //   ),
+            //   title: const Text(
+            //     "Activity History",
+            //     style: TextStyle(
+            //       fontSize: 15,
+            //       color: Colors.black87,
+            //     ),
+            //   ),
+            //   onTap: () {
+            //     Navigator.of(context).pop();
 
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const ActivityHistory(),
-                  ),
-                );
-              },
-            ),
+            //     Navigator.of(context).push(
+            //       MaterialPageRoute(
+            //         builder: (context) => const ActivityHistory(),
+            //       ),
+            //     );
+            //   },
+            // ),
 
             const Divider(height: 1),
 

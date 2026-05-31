@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/services/event_service.dart';
-import '../services/event_service.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/explore_card.dart';
 import '../widgets/search_bar.dart';

@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/basic_card.dart';
+
+import '../models/event_model.dart';
+import '../services/event_service.dart';
+
 class Calendar extends StatefulWidget {
   const Calendar({super.key});
 
@@ -13,37 +17,41 @@ class _CalendarState extends State<Calendar>{
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
-  final Map<DateTime, List<EventData>> _events = {
-    DateTime.utc(2026,5,18):[
-      EventData(
-      title: 'Morning Run', 
-      location: 'SCBD', 
-      startTime: "08:00",
-      endTime: "12:00", 
-      eventDate: '18 May 2026 ', 
-      imageUrl: "https://images.unsplash.com/flagged/photo-1556746834-cbb4a38ee593?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", 
-      type: 'Sports',
-      ),
-  
-   
-    EventData( 
-     title: 'Padel', 
-     location: 'Padelton',
-     startTime: "08:00",
-     endTime: "12:00",
-     eventDate: '19 May 2026', 
-     imageUrl: "https://images.unsplash.com/photo-1646649853703-7645147474ba?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", 
-     type: 'Sports',
-     ),
-    ],
-  };
+  List <EventModel> _allEvents = [];
+  bool _loading = true;
 
+  @override
+  void initState() {
+    super.initState();
+    _loadEvents();
+  }
+
+  Future<void> _loadEvents() async {
+    final events = await EventService().getEvents();
+
+    if (!mounted) return;
+
+    setState(() {
+      _allEvents = events;
+      _loading = false;
+    });
+  }
+
+  List<EventModel> _getEventsForDay(DateTime day) {
+    return _allEvents.where((event) {
+      final eventDate = DateTime.parse(event.eventDate);
+
+      return eventDate.year == day.year &&
+          eventDate.month == day.month &&
+          eventDate.day == day.day;
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
     final day = _selectedDay ?? _focusedDay;
-    final key = DateTime.utc(day.year, day.month, day.day);
-    final events = _events[key] ?? [];
+    final events = _getEventsForDay(day);
+
     return Scaffold(
     drawer: const AppDrawer(),
      appBar: PreferredSize(
@@ -81,8 +89,29 @@ class _CalendarState extends State<Calendar>{
        children: [
           TableCalendar(
             focusedDay: _focusedDay,
-            firstDay: DateTime.utc(2026, 1, 1),
-            lastDay: DateTime(2026, 12, 31),
+            firstDay: DateTime.utc(2025, 1, 1),
+            lastDay: DateTime(2030, 12, 31),
+
+            eventLoader: _getEventsForDay,
+
+            calendarBuilders: CalendarBuilders(
+              markerBuilder: (context, day, events) {
+                if (events.isEmpty) return null;
+
+                return Positioned(
+                  bottom: -2,
+                  child: Container(
+                    width: 7,
+                    height: 7,
+                    decoration: const BoxDecoration(
+                      color: Colors.black,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                );
+              },
+            ),
+
             selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
             onDaySelected: (selectedDay, focusedDay) {
               setState(() {
@@ -94,17 +123,24 @@ class _CalendarState extends State<Calendar>{
               _focusedDay = focusedDay;
             },
           ),
+
           Expanded(
-            child: events.isEmpty
-                ? Center(child: Text('No Activities Planned'))
-                : ListView.builder(
+            child: _loading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : events.isEmpty
+                  ? const Center(
+                      child: Text('No activities planned'),
+                    )
+                  : ListView.builder(
                     itemCount: events.length,
                     itemBuilder: (context, index) => SizedBox(
                       height: 280,
                       child: BasicCard(event: events[index]),
                     ),
                   ),
-          ),
+            ),
         ],
       ),
     );

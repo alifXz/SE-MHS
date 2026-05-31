@@ -13,7 +13,7 @@ class EventCarousel extends StatefulWidget {
 
 class _EventCarouselState extends State<EventCarousel> {
   List<EventModel> events = [];
-  bool loading = true;
+  bool _loading = true;
 
   final PageController _pageController = PageController(viewportFraction: 0.45);
   int _currentIndex = 0;
@@ -26,12 +26,12 @@ class _EventCarouselState extends State<EventCarousel> {
 
   Future<void> loadEvents() async {
     final result = await EventService().getEvents();
-    
+
     if(!mounted) return;
 
     setState(() {
       events = result.take(3).toList();
-      loading = false;
+      _loading = false;
     });
   }
 
@@ -43,7 +43,7 @@ class _EventCarouselState extends State<EventCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    if(!loading && events.isEmpty) {
+    if(!_loading && events.isEmpty) {
       return const Center(
         child: Text('No events available'),
       );
@@ -62,7 +62,7 @@ class _EventCarouselState extends State<EventCarousel> {
         const SizedBox(height: 12),
         SizedBox(
           height: 320, 
-          child: loading
+          child: _loading
             ? const Center(
                 child: CircularProgressIndicator(),
               )
