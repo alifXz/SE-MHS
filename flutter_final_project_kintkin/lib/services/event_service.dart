@@ -13,4 +13,15 @@ class EventService {
         .map<EventModel>((json) => EventModel.fromJson(json))
         .toList();
   }
+
+  Future<List<EventModel>> searchEvents(String query) async {
+    final response = await supabase
+        .from('events')
+        .select()
+        .ilike('title', '%$query%');
+    
+    return response
+      .map<EventModel>((json) => EventModel.fromJson(json))
+      .toList();
+    }
 }

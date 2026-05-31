@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/services/event_service.dart';
+import '../services/event_service.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/explore_card.dart';
 import '../widgets/search_bar.dart';
@@ -15,23 +16,51 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   bool isEventsSelected = true;
 
+  List<dynamic> _events = [];
+  bool _loading = true;
+
   final TextEditingController _searchController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _loadEvents();
+  }
+
+  Future<void> _loadEvents() async {
+    final events = await EventService().getEvents();
+
+    if(!mounted) return;
+
+    setState(() {
+      _events = events;
+      _loading = false;
+    });
+  }
+
   void dispose(){
     _searchController.dispose();
     super.dispose();
   }
 
-  void _performSearch(String query) async {
-    setState(() {}); 
-
-    if (query.isEmpty) {
-      debugPrint("Search cleared. Fetching default list...");
+  Future<void> _performSearch(String query) async {
+    if (query.trim().isEmpty) {
+      await _loadEvents();
       return;
     }
 
-    debugPrint("Searching Supabase for: $query");
+    setState(() {
+      _loading = true;
+    });
+
+    final results = await EventService().searchEvents(query);
+
+    if (!mounted) return;
+
+    setState(() {
+      _events = results;
+      _loading = false;
+    });
   }
 
   @override
@@ -135,25 +164,18 @@ class _ExploreScreenState extends State<ExploreScreen> {
           
           // --- DYNAMIC LIST SECTION ---
           Expanded(
-            child: FutureBuilder(
-              future: EventService().getEvents(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+            child: _loading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : ListView.builder(
+                padding: const EdgeInsets.all(20),
+                itemCount: _events.length,
+                itemBuilder: (context, index) {
+                  final event = _events[index];
 
-                final events = snapshot.data!;
-
-                return ListView.builder(
-                  padding: const EdgeInsets.all(20),
-                  itemCount: events.length,
-                  itemBuilder: (context, index) {
-                    final event = events[index];
-
-                    return ExploreCard(isCommunity: !isEventsSelected, event: event);
-                  }
-                );
-              },
+                  return ExploreCard(isCommunity: !isEventsSelected, event: event);
+                }, 
             ),
           ),
         ],
