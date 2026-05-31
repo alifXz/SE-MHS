@@ -128,6 +128,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
 
       await SupabaseService().createEvent(
         title: _eventNameController.text.trim(),
+        category: _selectedCategory!,
         organizer: _organizerController.text.trim(),
         location: _locationController.text.trim(),
         locationLink: _mapsLinkController.text.trim(),

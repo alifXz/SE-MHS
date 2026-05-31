@@ -1,6 +1,7 @@
 class EventModel {
   final String id;
   final String title;
+  final String category;
   final String organizer;
   final String location;
   final String locationLink;
@@ -15,6 +16,7 @@ class EventModel {
   EventModel({
     required this.id,
     required this.title,
+    required this.category,
     required this.organizer,
     required this.location,
     required this.locationLink,
@@ -31,6 +33,7 @@ class EventModel {
     return EventModel(
       id: json['id'],
       title: json['title'],
+      category: json['category'],
       organizer: json['organizer'],
       location: json['location'],
       locationLink: json['location_link'],

@@ -1,7 +1,8 @@
-// Necessary for ImageFilter.blur
 import 'package:flutter/material.dart';
 import 'event_card.dart';
-import 'basic_card.dart';
+
+import '../services/event_service.dart';
+import '../models/event_model.dart';
 
 class EventCarousel extends StatefulWidget {
   const EventCarousel({super.key});
@@ -11,46 +12,27 @@ class EventCarousel extends StatefulWidget {
 }
 
 class _EventCarouselState extends State<EventCarousel> {
-  int _currentIndex = 1; // start at center
-  late final PageController _pageController;
+  List<EventModel> events = [];
+  bool loading = true;
 
-  final List<EventData> events = [
-    EventData(
-      title: "Padel Mini Tournament",
-      location: "South Jakarta Courts",
-      startTime: "08:00",
-      endTime: "12:00",
-      eventDate: "Saturday, 25th July 2026",
-      imageUrl: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=800",
-      type: "COMING SOON",
-    ),
-    EventData(
-      title: "Escape Room",
-      location: "Alam Sutera Mall, Alam Sutera",
-      startTime: "08:00",
-      endTime: "12:00",
-      eventDate: "Thursday, 23rd July 2026",
-      imageUrl: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800",
-      type: "POPULAR",
-    ),
-    EventData(
-      title: "Ice Skating Party",
-      location: "BX Rink, Bintaro",
-      startTime: "08:00",
-      endTime: "12:00",
-      eventDate: "Sunday, 26th July 2026",
-      imageUrl: "https://images.unsplash.com/photo-1587463003444-0affd6049f88?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      type: "COMING SOON",
-    ),
-  ];
+  final PageController _pageController = PageController(viewportFraction: 0.45);
+  int _currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(
-      viewportFraction: 0.5, 
-      initialPage: _currentIndex,
-    );
+    loadEvents();
+  }
+
+  Future<void> loadEvents() async {
+    final result = await EventService().getEvents();
+    
+    if(!mounted) return;
+
+    setState(() {
+      events = result.take(3).toList();
+      loading = false;
+    });
   }
 
   @override
@@ -61,6 +43,12 @@ class _EventCarouselState extends State<EventCarousel> {
 
   @override
   Widget build(BuildContext context) {
+    if(!loading && events.isEmpty) {
+      return const Center(
+        child: Text('No events available'),
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -74,25 +62,29 @@ class _EventCarouselState extends State<EventCarousel> {
         const SizedBox(height: 12),
         SizedBox(
           height: 320, 
-          child: PageView.builder(
-            controller: _pageController,
-            itemCount: events.length,
-            onPageChanged: (i) => setState(() => _currentIndex = i),
-            itemBuilder: (context, index) {
-              final isCenter = index == _currentIndex;
-              return AnimatedScale(
-                scale: isCenter ? 1.02 : 0.8,
-                duration: const Duration(milliseconds: 300),
-                child: EventCard(
-                  event: events[index],
-                  isCenter: isCenter,
-                  onTap: () {
-                    // TODO: navigate to EventDetailPage
-                  },
-                ),
-              );
-            },
-          ),
+          child: loading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : PageView.builder(
+                controller: _pageController,
+                itemCount: events.length,
+                onPageChanged: (i) =>
+                  setState(() => _currentIndex = i),
+                itemBuilder: (context, index) {
+                  final isCenter = index == _currentIndex;
+
+                  return AnimatedScale(
+                    scale: isCenter ? 1.0 : 0.8,
+                    duration: const Duration(milliseconds: 300),
+                    child: EventCard(
+                      event: events[index],
+                      isCenter: isCenter,
+                      onTap: () {},
+                    ),
+                  );
+                },
+              ),
         ),
       ],
     );

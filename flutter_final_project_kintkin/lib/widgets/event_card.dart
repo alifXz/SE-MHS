@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_final_project_kintkin/models/event_model.dart';
 import 'basic_card.dart';
 
 class EventCard extends StatelessWidget {
-  final EventData event;
+  final EventModel event;
   final bool isCenter;
   final VoidCallback? onTap;
 
@@ -16,6 +17,50 @@ class EventCard extends StatelessWidget {
     this.isCenter = false,
     this.onTap,
   });
+
+  Color _getCategoryColor() {
+    switch (event.category.toLowerCase()) {
+      case 'sports':
+        return const Color(0xFF801A1A);
+
+      case 'gaming':
+        return Colors.purple;
+
+      case 'group activitiy':
+        return Colors.orange;
+      
+      case 'music':
+        return Colors.blue;
+
+      case 'others':
+        return Colors.green;
+
+      default:
+        return const Color(0xFFD81B60);
+    }
+  }
+
+  IconData _getCategoryIcon() {
+    switch (event.category.toLowerCase()) {
+      case 'sports':
+        return Icons.directions_run;
+
+      case 'gaming':
+        return Icons.sports_esports;
+
+      case 'group activity':
+        return Icons.groups;
+
+      case 'music':
+        return Icons.music_note;
+
+      case 'others':
+        return Icons.event;
+
+      default:
+        return Icons.event;
+    }
+  }
 
 @override
 Widget build(BuildContext context) {
@@ -70,16 +115,14 @@ Widget build(BuildContext context) {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: event.type == 'POPULAR'
-                  ? const Color(0xFF801A1A)
-                  : const Color(0xFFD81B60),
+              color: _getCategoryColor(),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  event.type,
+                  event.category.toUpperCase(),
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 9,
@@ -102,7 +145,7 @@ Widget build(BuildContext context) {
               color: Color(0xFFFFD700),
               shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.directions_run, size: 16, color: Colors.black),
+            child: Icon(_getCategoryIcon(), size: 16, color: Colors.black),
           ),
         ),
       ],

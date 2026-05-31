@@ -22,6 +22,7 @@ class SupabaseService {
 
   Future<void> createEvent({
     required String title,
+    required String category,
     required String organizer,
     required String location,
     required String locationLink,
@@ -42,6 +43,7 @@ class SupabaseService {
 
     await supabase.from('events').insert({
       'title': title,
+      'category': category,
       'organizer': organizer,
       'location': location,
       'location_link': locationLink,
