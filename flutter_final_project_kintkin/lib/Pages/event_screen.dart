@@ -248,16 +248,6 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 ),
               ),
 
-              const SizedBox(height: 8),
-
-              const Text(
-                'Create your own event',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Color(0xFF4A6472),
-                ),
-              ),
-
               const SizedBox(height: 40),
 
               // EVENT NAME
