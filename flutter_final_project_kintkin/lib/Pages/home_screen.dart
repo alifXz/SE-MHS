@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: const [
                   EventCarousel(),
                   SizedBox(height: 32),
-                  // ActivityCarousel(),
+                  ActivityCarousel(),
                   SizedBox(height: 80),
                 ],
               ),

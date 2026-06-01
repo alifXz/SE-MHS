@@ -25,7 +25,7 @@ class _EventCarouselState extends State<EventCarousel> {
   }
 
   Future<void> loadEvents() async {
-    final result = await EventService().getEvents();
+    final result = await EventService().getUpcomingEvents();
 
     if(!mounted) return;
 
