@@ -63,7 +63,7 @@ class BasicCard extends StatelessWidget {
         width: 300,
         margin: const EdgeInsets.symmetric(
           horizontal: 8,
-          vertical: 10,
+          vertical: 5,
         ),
         decoration: BoxDecoration(
           color: const Color(0xFFF0F0F0),
@@ -163,7 +163,7 @@ class BasicCard extends StatelessWidget {
     return Expanded(
       flex: 4,
       child: Padding(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.fromLTRB(22, 10, 10, 5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -216,7 +216,7 @@ class BasicCard extends StatelessWidget {
       children: [
         Icon(
           icon,
-          size: 14,
+          size: 18,
           color: Colors.grey[600],
         ),
 
@@ -226,7 +226,7 @@ class BasicCard extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-              fontSize: 11,
+              fontSize: 12,
               color: Colors.grey[600],
               fontWeight: FontWeight.w500,
             ),

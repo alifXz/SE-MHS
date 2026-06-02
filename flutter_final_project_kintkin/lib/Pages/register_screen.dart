@@ -242,6 +242,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 onPressed: _handleRegister,
                 isLoading: _isLoading,
                 textColor: Colors.white,
+                bgColor: Color(0xFF324047),
               ),
 
               const SizedBox(height: 24),
