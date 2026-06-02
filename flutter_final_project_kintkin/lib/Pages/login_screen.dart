@@ -140,6 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: _handleLogin,
                 isLoading: _isLoading,
                 textColor: Colors.white,
+                bgColor: Color(0xFF324047),
               ),
 
               const SizedBox(height: 24),

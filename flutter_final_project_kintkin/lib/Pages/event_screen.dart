@@ -215,24 +215,22 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               const SizedBox(height: 20),
               Align(
                 alignment: Alignment.topLeft,
-                child: Positioned(
-                          top: 20,
-                          left: 16,
-                          child: SafeArea(
-                            child: GestureDetector(
-                              onTap: () => Navigator.of(context).pop(),
-                              child: Container(
-                                width: 42,
-                                height: 42,
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFF1B4F6B),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(Icons.arrow_back, color: Colors.white, size: 22),
-                              ),
-                            ),
-                          ),
-                        ),
+                child: GestureDetector(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: Container(
+                    width: 42,
+                    height: 42,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF1B4F6B),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                      size: 22,
+                    ),
+                  ),
+                ),
               ),
 
               const AuthLogo(),
@@ -245,16 +243,6 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF1A1A1A),
-                ),
-              ),
-
-              const SizedBox(height: 8),
-
-              const Text(
-                'Create your own event',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Color(0xFF4A6472),
                 ),
               ),
 

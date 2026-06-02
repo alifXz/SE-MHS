@@ -27,7 +27,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   }
 
   Future<void> _loadEvents() async {
-    final events = await EventService().getEvents();
+    final events = await EventService().getUpcomingEvents();
 
     if(!mounted) return;
 
