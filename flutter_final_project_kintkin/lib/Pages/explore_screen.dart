@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/services/event_service.dart';
+import 'package:flutter_final_project_kintkin/widgets/filter_sheet.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/explore_card.dart';
 import '../widgets/search_bar.dart';
@@ -13,10 +14,13 @@ class ExploreScreen extends StatefulWidget {
 }
 
 class _ExploreScreenState extends State<ExploreScreen> {
+
   bool isEventsSelected = true;
 
   List<dynamic> _events = [];
   bool _loading = true;
+
+  Set<String> _selectedFilters = {}; 
 
   final TextEditingController _searchController = TextEditingController();
 
@@ -46,7 +50,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
     if (query.trim().isEmpty) {
       await _loadEvents();
       return;
+
+
     }
+
 
     setState(() {
       _loading = true;
@@ -61,6 +68,20 @@ class _ExploreScreenState extends State<ExploreScreen> {
       _loading = false;
     });
   }
+  
+    //FILTER buat yg category
+    Future<void> _openFilter() async {
+    final result = await showFilterSheet(
+      context,
+      initialSelected: _selectedFilters,
+    );
+    //Nanti backendnya send ke _selectedFilters
+    if (result != null) {
+      setState(() => _selectedFilters = result);
+    }
+  }
+  
+    
 
   @override
   Widget build(BuildContext context) {
@@ -149,13 +170,25 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 ),
                 const SizedBox(width: 15),
                 // Filter Icon
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    shape: BoxShape.circle,
+               // Filter Icon
+                GestureDetector(
+                  onTap: _openFilter,
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: _selectedFilters.isEmpty
+                          ? Colors.grey[100]
+                          : const Color(0xFF003049),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.tune,
+                      size: 20,
+                      color: _selectedFilters.isEmpty
+                          ? Colors.black
+                          : Colors.white,
+                    ),
                   ),
-                  child: const Icon(Icons.tune, size: 20),
                 ),
               ],
             ),
