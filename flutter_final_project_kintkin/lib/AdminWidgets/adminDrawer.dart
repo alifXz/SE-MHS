@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/Pages/event_screen.dart';
 import 'package:flutter_final_project_kintkin/Pages/history_page.dart';
+import 'package:flutter_final_project_kintkin/Pages/login_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Admindrawer extends StatelessWidget {
   const Admindrawer({super.key});
@@ -67,14 +69,21 @@ class Admindrawer extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.logout, color: Colors.black),
               title: const Text('Logout'),
-              onTap:() {
-                 Navigator.of(context).pop();
+             onTap: () async {
 
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const CreateEventScreen(),
-                  ),
-                );
+                Navigator.of(context).pop();
+
+                // Supabase logout
+                await Supabase.instance.client.auth.signOut();
+
+                if (context.mounted) {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ),
+                    (route) => false,
+                  );
+                }
               },
             )
 

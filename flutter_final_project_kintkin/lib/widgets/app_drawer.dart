@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_final_project_kintkin/Pages/admin_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../Pages/history_page.dart';
@@ -76,6 +77,29 @@ class AppDrawer extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => const CreateEventScreen(),
+                  ),
+                );
+              },
+            ),
+            const Divider(height: 1),
+            ListTile(
+              leading: const Icon(
+                Icons.people,
+              ),
+              title: const Text(
+                "Admin Page",
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.redAccent,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              onTap: () {
+                Navigator.of(context).pop();
+
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const AdminScreen(),
                   ),
                 );
               },
