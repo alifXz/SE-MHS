@@ -9,6 +9,7 @@ class EventName extends StatelessWidget {
   final VoidCallback? onTap;
   final bool readOnly;
   final TextInputType? keyboardType;
+  final bool obscureText;
 
   const EventName({
     super.key,
@@ -19,7 +20,9 @@ class EventName extends StatelessWidget {
     this.maxLines = 1,
     this.onTap,
     this.readOnly = false,
-    this.keyboardType,
+    this.keyboardType, 
+    this.obscureText = false
+    ,
     });
 
   @override

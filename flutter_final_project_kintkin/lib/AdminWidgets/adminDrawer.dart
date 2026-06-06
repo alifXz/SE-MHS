@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_final_project_kintkin/Pages/CreateCommunity_screen.dart';
 import 'package:flutter_final_project_kintkin/Pages/event_screen.dart';
 import 'package:flutter_final_project_kintkin/Pages/history_page.dart';
 import 'package:flutter_final_project_kintkin/Pages/login_screen.dart';
@@ -48,7 +49,13 @@ class Admindrawer extends StatelessWidget {
               leading: const Icon(Icons.group, color: Colors.black),
               title: const Text('Create Community'),
               onTap:() {
-                //Navigation to create community
+                 Navigator.of(context).pop();
+
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const CreatecommunityScreen(),
+                  ),
+                );
               },
             ),
              const Divider(),
