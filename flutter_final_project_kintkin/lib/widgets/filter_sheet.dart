@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class FilterCategory {
-  final String id;      // dipakai backend nanti (query / API)
+  //VARIABLE buat di DBnya
+  final String id;      
   final String label;
   final IconData icon;
  
