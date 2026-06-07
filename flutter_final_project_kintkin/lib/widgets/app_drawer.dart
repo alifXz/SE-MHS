@@ -90,8 +90,8 @@ class AppDrawer extends StatelessWidget {
                 "Admin Page",
                 style: TextStyle(
                   fontSize: 15,
-                  color: Colors.redAccent,
-                  fontWeight: FontWeight.w600,
+                  color: Color.fromARGB(255, 0, 0, 0),
+                  fontWeight: FontWeight.w400,
                 ),
               ),
               onTap: () {

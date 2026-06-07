@@ -9,12 +9,12 @@ class AdminScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 237, 237, 237),
       appBar: AppBar(
-        backgroundColor:Color.fromARGB(255, 255, 255, 255),
-        elevation: 0,
+        backgroundColor:Color.fromARGB(255, 107, 107, 107),
+        elevation: 4,
         shadowColor: Colors.black,
         iconTheme: const IconThemeData(color: Colors.blueGrey),
         title: const Text(
-          'Wellcome !',
+          'Welcome !',
           style: TextStyle(
             color: Colors.black87,
             fontWeight: FontWeight.w500,
@@ -24,7 +24,7 @@ class AdminScreen extends StatelessWidget {
       ),
       drawer: const Admindrawer(),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(32),
         child: Column(
           children: [
             const StatCard(
