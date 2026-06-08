@@ -125,7 +125,7 @@ class _AdminScreenState extends State<AdminScreen> {
                       Expanded(
                         child: GestureDetector(
                           onTap: () => Navigator.push(
-                            context,
+                            context,  
                             MaterialPageRoute(
                               builder: (_) => const ActiveEventsPage(),
                             ),

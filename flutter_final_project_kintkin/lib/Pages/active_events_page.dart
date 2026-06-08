@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_final_project_kintkin/Pages/edit_event_page.dart';
 import 'package:flutter_final_project_kintkin/models/event_model.dart';
 import 'package:flutter_final_project_kintkin/services/event_service.dart';
 import 'package:flutter_final_project_kintkin/AdminWidgets/admin_event_card.dart';
+
 
 class ActiveEventsPage extends StatefulWidget {
   const ActiveEventsPage({super.key});
@@ -32,6 +34,31 @@ class _ActiveEventsPageState extends State<ActiveEventsPage> {
 
   Future<void> _deleteEvent(EventModel event) async {
     setState(() => _events.removeWhere((e) => e.id == event.id));
+  }
+
+  Future<void> _editEvent(EventModel event) async {
+    final result = await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => EditEventPage(
+          event: {
+            'id': event.id,
+            'title': event.title,
+            'description': event.description,
+            'location': event.location,
+            'location_link': event.locationLink,
+            'start_time': event.startTime,
+            'end_time': event.endTime,
+            'event_date': event.eventDate,
+            'organizer': event.organizer,
+            'image_url': event.imageUrl,
+            'venue_partner': event.venuePartner,
+            'price': event.price,
+            'category': event.category,
+          },
+        ),
+      ),
+    );
+    if (result == true) _loadEvents();
   }
 
   @override
@@ -82,6 +109,7 @@ class _ActiveEventsPageState extends State<ActiveEventsPage> {
                     child: AdminEventCard(
                       event: _events[index],
                       onDelete: () => _deleteEvent(_events[index]),
+                      onEdit: () => _editEvent(_events[index]),
                     ),
                   ),
                 ),
