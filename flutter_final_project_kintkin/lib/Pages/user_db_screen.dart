@@ -18,7 +18,6 @@ class _UserDbScreenState extends State<UserDbScreen> {
       email: 'alice@example.com',
       phone: '+62 811 1111 1111',
       role: 'Admin',
-      status: 'active',
       joinDate: DateTime(2023, 1, 10),
     ),
     UserModel(
@@ -27,7 +26,6 @@ class _UserDbScreenState extends State<UserDbScreen> {
       email: 'bob@example.com',
       phone: '+62 822 2222 2222',
       role: 'User',
-      status: 'inactive',
       joinDate: DateTime(2023, 5, 22),
     ),
     UserModel(
@@ -35,8 +33,7 @@ class _UserDbScreenState extends State<UserDbScreen> {
       name: 'Clara Lee',
       email: 'clara@example.com',
       phone: '+62 833 3333 3333',
-      role: 'Moderator',
-      status: 'active',
+      role: 'User',
       joinDate: DateTime(2023, 8, 3),
     ),
     UserModel(
@@ -45,7 +42,6 @@ class _UserDbScreenState extends State<UserDbScreen> {
       email: 'david@example.com',
       phone: '+62 844 4444 4444',
       role: 'User',
-      status: 'banned',
       joinDate: DateTime(2024, 2, 14),
     ),
     UserModel(
@@ -54,7 +50,6 @@ class _UserDbScreenState extends State<UserDbScreen> {
       email: 'eva@example.com',
       phone: '+62 855 5555 5555',
       role: 'User',
-      status: 'active',
       joinDate: DateTime(2024, 4, 1),
     ),
     UserModel(
@@ -62,8 +57,7 @@ class _UserDbScreenState extends State<UserDbScreen> {
       name: 'Frank Chen',
       email: 'frank@example.com',
       phone: '+62 866 6666 6666',
-      role: 'Moderator',
-      status: 'inactive',
+      role: 'User',
       joinDate: DateTime(2024, 6, 19),
     ),
   ];
@@ -84,9 +78,8 @@ class _UserDbScreenState extends State<UserDbScreen> {
   List<UserModel> get _filteredUsers {
     return _allUsers.where((u) {
       final roleMatch = _selectedRole == 'All' || u.role == _selectedRole;
-      final statusMatch =
-          _selectedStatus == 'All' || u.status == _selectedStatus;
-      return roleMatch && statusMatch;
+      
+      return roleMatch;
     }).toList();
   }
 
@@ -190,38 +183,6 @@ class _UserDbScreenState extends State<UserDbScreen> {
                         ),
                         onSelected: (_) {
                           setSheetState(() => _selectedRole = role);
-                          setState(() {});
-                        },
-                      );
-                    }).toList(),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Status',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey,
-                      fontSize: 13,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    children: ['All', 'active', 'inactive'].map((s) {
-                      final selected = _selectedStatus == s;
-                      final label = s == 'All'
-                          ? 'All'
-                          : s[0].toUpperCase() + s.substring(1);
-                      return ChoiceChip(
-                        label: Text(label),
-                        selected: selected,
-                        selectedColor: const Color(0xFF333230),
-                        labelStyle: TextStyle(
-                          color: selected ? Colors.white : Colors.black87,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        onSelected: (_) {
-                          setSheetState(() => _selectedStatus = s);
                           setState(() {});
                         },
                       );
@@ -389,8 +350,6 @@ class _UserDbScreenState extends State<UserDbScreen> {
                             final user = filtered[index];
                             return UserCard(
                               user: user,
-                              onView: () {},
-                              onEdit: () {},
                               onDelete: () => _showDeleteDialog(user),
                             );
                           },

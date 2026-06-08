@@ -6,7 +6,6 @@ class UserModel {
   final String email;
   final String phone;
   final String role;
-  final String status;
   final DateTime joinDate;
 
   const UserModel({
@@ -15,41 +14,19 @@ class UserModel {
     required this.email,
     required this.phone,
     required this.role,
-    required this.status,
     required this.joinDate,
   });
 }
 
 class UserCard extends StatelessWidget {
   final UserModel user;
-  final VoidCallback? onView;
-  final VoidCallback? onEdit;
   final VoidCallback? onDelete;
 
   const UserCard({
     super.key,
     required this.user,
-    this.onView,
-    this.onEdit,
     this.onDelete,
   });
-
-  Color _statusColor(String status) {
-    switch (status.toLowerCase()) {
-      case 'active':
-        return const Color(0xFF22C55E);
-      case 'inactive':
-      case 'banned':
-        return const Color(0xFFF59E0B);
-      default:
-        return const Color(0xFF6B7280);
-    }
-  }
-
-  String _displayStatus(String status) {
-    if (status.toLowerCase() == 'banned') return 'Inactive';
-    return status[0].toUpperCase() + status.substring(1);
-  }
 
   Color _avatarColor() {
     final colors = [
@@ -64,11 +41,9 @@ class UserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final statusColor = _statusColor(user.status);
-
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
-      height: 165,
+      height: 190,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -83,20 +58,29 @@ class UserCard extends StatelessWidget {
       child: Row(
         children: [
           Padding(
-            padding: const EdgeInsets.all(10),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(14),
-              child: Container(
-                width: 100,
+            padding: const EdgeInsets.all(14),
+            child: Container(
+              width: 72,
+              height: 72,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
                 color: _avatarColor(),
-                child: Center(
-                  child: Text(
-                    user.name.isNotEmpty ? user.name[0].toUpperCase() : '?',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 42,
-                      fontWeight: FontWeight.bold,
-                    ),
+                boxShadow: [
+                  BoxShadow(
+                    color: _avatarColor().withValues(alpha: 0.35),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Center(
+                child: Text(
+                  user.name.isNotEmpty ? user.name[0].toUpperCase() : '?',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 30,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.5,
                   ),
                 ),
               ),
@@ -105,14 +89,21 @@ class UserCard extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(6, 14, 14, 12),
-              child: Stack(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 44),
-                        child: Text(
+                      // User ID top-left
+                      Text(
+                        '#${user.id}',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: Colors.grey.shade400,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.4,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
                           user.name,
                           style: const TextStyle(
                             fontSize: 16,
@@ -120,7 +111,6 @@ class UserCard extends StatelessWidget {
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
-                      ),
                       const SizedBox(height: 4),
                       Container(
                         padding: const EdgeInsets.symmetric(
@@ -152,48 +142,12 @@ class UserCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           _actionIcon(
-                            Icons.visibility_outlined,
-                            const Color(0xFF1B4F6B),
-                            onView,
-                          ),
-                          const SizedBox(width: 6),
-                          _actionIcon(
-                            Icons.edit_outlined,
-                            const Color(0xFF333230),
-                            onEdit,
-                          ),
-                          const SizedBox(width: 6),
-                          _actionIcon(
                             Icons.delete_outline,
                             const Color(0xFF801A1A),
                             onDelete,
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Tooltip(
-                      message: _displayStatus(user.status),
-                      child: Container(
-                        width: 36,
-                        height: 36,
-                        decoration: BoxDecoration(
-                          color: statusColor,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          user.status.toLowerCase() == 'active'
-                              ? Icons.check
-                              : Icons.pause,
-                          color: Colors.white,
-                          size: 18,
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
