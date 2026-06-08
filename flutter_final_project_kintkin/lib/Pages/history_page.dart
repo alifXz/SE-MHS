@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/models/event_model.dart';
+import 'package:flutter_final_project_kintkin/services/auth_service.dart';
 import 'package:flutter_final_project_kintkin/services/event_service.dart';
 import 'package:flutter_final_project_kintkin/widgets/app_drawer.dart';
 import '../widgets/basic_card.dart';
@@ -22,7 +23,11 @@ class _ActiviryHistoryState extends State<ActivityHistory> {
   }
 
   Future<void> _loadHistory() async {
-    final history = await EventService().getPastEvents();
+    final service = EventService();
+    
+    final history = AuthService.isAdmin
+      ? await service.getPastEvents()
+      : await service.getUserHistory();
 
     if (!mounted) return;
 
