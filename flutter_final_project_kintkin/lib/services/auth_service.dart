@@ -3,6 +3,13 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class AuthService {
   final supabase = Supabase.instance.client;
 
+  static String get currentRole {
+    final user = Supabase.instance.client.auth.currentUser;
+    return user?.appMetadata['role'] ?? 'user';
+  }
+
+  static bool get isAdmin => currentRole == 'admin';
+
   Future<void> signUp({
     required String name,
     required String email,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/Pages/admin_screen.dart';
+import 'package:flutter_final_project_kintkin/services/auth_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../Pages/history_page.dart';
@@ -59,53 +60,57 @@ class AppDrawer extends StatelessWidget {
             const Divider(height: 1),
 
             // Events
-            ListTile(
-              leading: const Icon(
-                Icons.event,
-                color: Colors.black54,
-              ),
-              title: const Text(
-                "Create Event",
-                style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.black87,
+            if(AuthService.isAdmin)...[
+              ListTile(
+                leading: const Icon(
+                  Icons.event,
+                  color: Colors.black54,
                 ),
-              ),
-              onTap: () {
-                Navigator.of(context).pop();
-
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const CreateEventScreen(),
+                title: const Text(
+                  "Create Event",
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black87,
                   ),
-                );
-              },
-            ),
-            const Divider(height: 1),
-            ListTile(
-              leading: const Icon(
-                Icons.people,
-              ),
-              title: const Text(
-                "Admin Page",
-                style: TextStyle(
-                  fontSize: 15,
-                  color: Color.fromARGB(255, 0, 0, 0),
-                  fontWeight: FontWeight.w400,
                 ),
+                onTap: () {
+                  Navigator.of(context).pop();
+
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const CreateEventScreen(),
+                    ),
+                  );
+                },
               ),
-              onTap: () {
-                Navigator.of(context).pop();
-
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const AdminScreen(),
+              const Divider(height: 1),
+            ],
+            
+            if(AuthService.isAdmin) ...[
+              ListTile(
+                leading: const Icon(
+                  Icons.people,
+                ),
+                title: const Text(
+                  "Admin Page",
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Color.fromARGB(255, 0, 0, 0),
+                    fontWeight: FontWeight.w400,
                   ),
-                );
-              },
-            ),
+                ),
+                onTap: () {
+                  Navigator.of(context).pop();
 
-            const Divider(height: 1),
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const AdminScreen(),
+                    ),
+                  );
+                },
+              ),
+              const Divider(height: 1),
+            ],
 
             // Logout
             ListTile(
