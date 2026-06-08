@@ -14,7 +14,7 @@ class AdminScreen extends StatelessWidget {
         backgroundColor:Color.fromARGB(255, 107, 107, 107),
         elevation: 4,
         shadowColor: Colors.black,
-        iconTheme: const IconThemeData(color: Colors.blueGrey),
+        automaticallyImplyLeading: false,
         title: const Text(
           'Welcome !',
           style: TextStyle(
@@ -23,8 +23,16 @@ class AdminScreen extends StatelessWidget {
             fontSize: 22,
           ),
         ),
+        actions: [
+          Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.menu, color: Colors.blueGrey),
+              onPressed: () => Scaffold.of(context).openEndDrawer(),
+            ),
+          ),
+        ],
       ),
-      drawer: const Admindrawer(),
+      endDrawer: const Admindrawer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(32),
         child: Column(
