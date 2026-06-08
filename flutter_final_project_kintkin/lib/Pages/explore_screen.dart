@@ -121,56 +121,23 @@ class _ExploreScreenState extends State<ExploreScreen> {
         ),
       body: Column(
         children: [
-          ExploreSearchBar(
-            controller: _searchController,
-            onSearch: _performSearch,
-            onClear: () {
-              setState(() {
-                _searchController.clear();
-                _performSearch('');
-              });
-            },
-          ),
-          // --- TAB TOGGLE SECTION ---
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
             child: Row(
               children: [
                 Expanded(
-                  child: Container(
-                    height: 45,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(color: Colors.grey[300]!),
-                    ),
-                    child: Row(
-                      children: [
-                        // Events Tab
-                        Expanded(
-                          child: _buildToggleButton(
-                            "Events",
-                            isEventsSelected,
-                            () => setState(() => isEventsSelected = true),
-                            const Color(0xFF801A1A), // red
-                          ),
-                        ),
-                        // Communities Tab
-                        Expanded(
-                          child: _buildToggleButton(
-                            "Communities",          
-                            !isEventsSelected,      
-                            () => setState(() => isEventsSelected = false), 
-                            const Color(0xFF003049), 
-                          ),
-                        ),
-                      ],
-                    ),
+                  child: ExploreSearchBar(
+                    controller: _searchController,
+                    onSearch: _performSearch,
+                    onClear: () {
+                      setState(() {
+                        _searchController.clear();
+                        _performSearch('');
+                      });
+                    },
                   ),
                 ),
-                const SizedBox(width: 15),
-                // Filter Icon
-               // Filter Icon
+                const SizedBox(width: 12),
                 GestureDetector(
                   onTap: _openFilter,
                   child: Container(
@@ -216,23 +183,4 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
-  Widget _buildToggleButton(String label, bool active, VoidCallback onTap, Color activeColor) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: active ? activeColor : Colors.transparent,
-          borderRadius: BorderRadius.circular(30),
-        ),
-        alignment: Alignment.center,
-        child: Text(
-          label,
-          style: TextStyle(
-            color: active ? Colors.white : Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
 }
