@@ -10,23 +10,27 @@ class AdminScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 237, 237, 237),
-      appBar: AppBar(
-        backgroundColor:Color.fromARGB(255, 107, 107, 107),
-        elevation: 4,
-        shadowColor: Colors.black,
+      appBar:  AppBar(
         automaticallyImplyLeading: false,
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black87),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
         title: const Text(
-          'Welcome !',
+          'Admin Panel',
           style: TextStyle(
             color: Colors.black87,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.bold,
             fontSize: 22,
           ),
         ),
+        centerTitle: true,
         actions: [
           Builder(
             builder: (context) => IconButton(
-              icon: const Icon(Icons.menu, color: Colors.blueGrey),
+              icon: const Icon(Icons.menu, color: Colors.black87),
               onPressed: () => Scaffold.of(context).openEndDrawer(),
             ),
           ),
@@ -56,9 +60,9 @@ class AdminScreen extends StatelessWidget {
                 SizedBox(width: 16),
                 Expanded(
                   child: StatCard(
-                    title: 'Communities',
+                    title: 'Users',
                     value: '4',
-                    icon: Icons.forum,
+                    icon: Icons.person_2_rounded,
                     isSmall: true,
                   ),
                 ),
