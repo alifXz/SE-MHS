@@ -5,6 +5,7 @@ class StatCard extends StatelessWidget {
   final String value;
   final IconData icon;
   final bool isSmall;
+  final VoidCallback? onTap;
 
   const StatCard({
     super.key,
@@ -12,11 +13,14 @@ class StatCard extends StatelessWidget {
     required this.value,
     required this.icon,
     this.isSmall = false,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
       width: double.infinity,
       padding: EdgeInsets.all(isSmall ? 39 : 40),
       decoration: BoxDecoration(
@@ -60,6 +64,7 @@ class StatCard extends StatelessWidget {
          
         ],
       ),
+    ),
     );
   }
 }

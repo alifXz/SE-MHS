@@ -6,7 +6,7 @@ class UserModel {
   final String email;
   final String phone;
   final String role;
-  final String status; // 'active', 'inactive', 'banned'
+  final String status;
   final DateTime joinDate;
 
   const UserModel({
@@ -39,297 +39,197 @@ class UserCard extends StatelessWidget {
       case 'active':
         return const Color(0xFF22C55E);
       case 'inactive':
-        return const Color(0xFFF59E0B);
       case 'banned':
-        return const Color(0xFFEF4444);
+        return const Color(0xFFF59E0B);
       default:
         return const Color(0xFF6B7280);
     }
   }
 
+  String _displayStatus(String status) {
+    if (status.toLowerCase() == 'banned') return 'Inactive';
+    return status[0].toUpperCase() + status.substring(1);
+  }
+
+  Color _avatarColor() {
+    final colors = [
+      const Color(0xFF1B4F6B),
+      const Color(0xFF801A1A),
+      const Color(0xFF003049),
+      const Color(0xFF333230),
+    ];
+    if (user.name.isEmpty) return colors[0];
+    return colors[user.name.codeUnitAt(0) % colors.length];
+  }
+
   @override
   Widget build(BuildContext context) {
+    final statusColor = _statusColor(user.status);
+
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.only(bottom: 16),
+      height: 165,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.07),
-            blurRadius: 12,
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 16,
             offset: const Offset(0, 4),
           ),
         ],
       ),
-      child: Column(
+      child: Row(
         children: [
-          // Header
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF8F9FA),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-              border: Border(
-                bottom: BorderSide(color: Colors.grey.shade200),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // ID badge
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF1E293B),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(14),
+              child: Container(
+                width: 100,
+                color: _avatarColor(),
+                child: Center(
                   child: Text(
-                    user.id,
+                    user.name.isNotEmpty ? user.name[0].toUpperCase() : '?',
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 12,
+                      fontSize: 42,
                       fontWeight: FontWeight.bold,
-                      letterSpacing: 0.5,
                     ),
                   ),
                 ),
-                // Action buttons
-                Row(
-                  children: [
-                    _ActionIcon(
-                      icon: Icons.visibility_outlined,
-                      color: const Color(0xFF3B82F6),
-                      onTap: onView,
-                      tooltip: 'View',
-                    ),
-                    const SizedBox(width: 4),
-                    _ActionIcon(
-                      icon: Icons.edit_outlined,
-                      color: const Color(0xFFF59E0B),
-                      onTap: onEdit,
-                      tooltip: 'Edit',
-                    ),
-                    const SizedBox(width: 4),
-                    _ActionIcon(
-                      icon: Icons.delete_outline,
-                      color: const Color(0xFFEF4444),
-                      onTap: onDelete,
-                      tooltip: 'Delete',
-                    ),
-                  ],
-                ),
-              ],
+              ),
             ),
           ),
-
-          // Body
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                // Name + Status row
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 18,
-                          backgroundColor: const Color(0xFF1E293B),
-                          child: Text(
-                            user.name.isNotEmpty ? user.name[0].toUpperCase() : '?',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(6, 14, 14, 12),
+              child: Stack(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 44),
+                        child: Text(
                           user.name,
                           style: const TextStyle(
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            color: Color(0xFF1E293B),
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1B4F6B).withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          user.role,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: Color(0xFF1B4F6B),
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                      ],
+                      ),
+                      const Spacer(),
+                      _detailRow(Icons.email_outlined, user.email),
+                      const SizedBox(height: 3),
+                      _detailRow(Icons.phone_outlined, user.phone),
+                      const SizedBox(height: 3),
+                      _detailRow(
+                        Icons.calendar_today_outlined,
+                        '${user.joinDate.day}/${user.joinDate.month}/${user.joinDate.year}',
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          _actionIcon(
+                            Icons.visibility_outlined,
+                            const Color(0xFF1B4F6B),
+                            onView,
+                          ),
+                          const SizedBox(width: 6),
+                          _actionIcon(
+                            Icons.edit_outlined,
+                            const Color(0xFF333230),
+                            onEdit,
+                          ),
+                          const SizedBox(width: 6),
+                          _actionIcon(
+                            Icons.delete_outline,
+                            const Color(0xFF801A1A),
+                            onDelete,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Tooltip(
+                      message: _displayStatus(user.status),
+                      child: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: statusColor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          user.status.toLowerCase() == 'active'
+                              ? Icons.check
+                              : Icons.pause,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                      ),
                     ),
-                    _StatusBadge(status: user.status, color: _statusColor(user.status)),
-                  ],
-                ),
-
-                const SizedBox(height: 12),
-                const Divider(height: 1),
-                const SizedBox(height: 12),
-
-                // Info rows
-                _InfoRow(icon: Icons.email_outlined, label: 'Email', value: user.email),
-                const SizedBox(height: 8),
-                _InfoRow(icon: Icons.phone_outlined, label: 'Phone', value: user.phone),
-                const SizedBox(height: 8),
-                _InfoRow(icon: Icons.badge_outlined, label: 'Role', value: user.role),
-                const SizedBox(height: 8),
-                _InfoRow(
-                  icon: Icons.calendar_today_outlined,
-                  label: 'Joined',
-                  value:
-                      '${user.joinDate.day}/${user.joinDate.month}/${user.joinDate.year}',
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],
       ),
     );
   }
-}
 
-class _InfoRow extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String value;
-
-  const _InfoRow({
-    required this.icon,
-    required this.label,
-    required this.value,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _detailRow(IconData icon, String text) {
     return Row(
       children: [
-        Icon(icon, size: 15, color: const Color(0xFF94A3B8)),
-        const SizedBox(width: 8),
-        SizedBox(
-          width: 52,
-          child: Text(
-            label,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Color(0xFF94A3B8),
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        const SizedBox(width: 8),
+        Icon(icon, size: 13, color: Colors.grey),
+        const SizedBox(width: 5),
         Expanded(
           child: Text(
-            value,
-            style: const TextStyle(
-              fontSize: 13,
-              color: Color(0xFF1E293B),
-              fontWeight: FontWeight.w500,
-            ),
+            text,
+            style: const TextStyle(fontSize: 12, color: Colors.grey),
             overflow: TextOverflow.ellipsis,
           ),
         ),
       ],
     );
   }
-}
 
-class _StatusBadge extends StatelessWidget {
-  final String status;
-  final Color color;
-
-  const _StatusBadge({required this.status, required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.4)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 6,
-            height: 6,
-            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-          ),
-          const SizedBox(width: 5),
-          Text(
-            status[0].toUpperCase() + status.substring(1),
-            style: TextStyle(
-              color: color,
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ActionIcon extends StatelessWidget {
-  final IconData icon;
-  final Color color;
-  final VoidCallback? onTap;
-  final String tooltip;
-
-  const _ActionIcon({
-    required this.icon,
-    required this.color,
-    required this.tooltip,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Tooltip(
-      message: tooltip,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(8),
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.all(6),
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Icon(icon, size: 16, color: color),
+  Widget _actionIcon(IconData icon, Color color, VoidCallback? onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(8),
         ),
+        child: Icon(icon, size: 15, color: color),
       ),
     );
   }
 }
-
-// ---------------------------------------------------------------------------
-// Example usage in user_db_screen.dart
-// ---------------------------------------------------------------------------
-//
-// final List<UserModel> users = [
-//   UserModel(
-//     id: 'USR001',
-//     name: 'John Doe',
-//     email: 'john@example.com',
-//     phone: '+62 812 3456 7890',
-//     role: 'Admin',
-//     status: 'active',
-//     joinDate: DateTime(2024, 3, 15),
-//   ),
-// ];
-//
-// ListView.builder(
-//   itemCount: users.length,
-//   itemBuilder: (context, index) {
-//     final user = users[index];
-//     return UserCard(
-//       user: user,
-//       onView: () => Navigator.push(context, MaterialPageRoute(
-//         builder: (_) => UserDetailScreen(user: user),
-//       )),
-//       onEdit: () => showEditUserDialog(context, user),
-//       onDelete: () => showDeleteConfirmDialog(context, user),
-//     );
-//   },
-// )

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_final_project_kintkin/AdminWidgets/user_card.dart' ;// adjust import path as needed
+import 'package:flutter_final_project_kintkin/AdminWidgets/user_card.dart';
 
 class UserDbScreen extends StatefulWidget {
   const UserDbScreen({super.key});
@@ -11,7 +11,6 @@ class UserDbScreen extends StatefulWidget {
 class _UserDbScreenState extends State<UserDbScreen> {
   bool _isLoading = false;
 
-  // Dummy data
   final List<UserModel> _allUsers = [
     UserModel(
       id: 'USR001',
@@ -73,7 +72,12 @@ class _UserDbScreenState extends State<UserDbScreen> {
   String _selectedStatus = 'All';
 
   List<String> get _roles {
-    final roles = _allUsers.map((u) => u.role).toSet().toList()..sort();
+    final roles = _allUsers
+        .map((u) => u.role)
+        .where((r) => r != 'Moderator')
+        .toSet()
+        .toList()
+      ..sort();
     return ['All', ...roles];
   }
 
@@ -88,7 +92,6 @@ class _UserDbScreenState extends State<UserDbScreen> {
 
   Future<void> _onRefresh() async {
     setState(() => _isLoading = true);
-    // Simulate a network call
     await Future.delayed(const Duration(seconds: 1));
     setState(() => _isLoading = false);
   }
@@ -97,7 +100,7 @@ class _UserDbScreenState extends State<UserDbScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text('Delete User'),
         content: Text('Are you sure you want to delete ${user.name}?'),
         actions: [
@@ -108,13 +111,14 @@ class _UserDbScreenState extends State<UserDbScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(ctx);
-              // TODO: delete logic
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('${user.name} deleted')),
               );
             },
-            child:
-                const Text('Delete', style: TextStyle(color: Color(0xFFEF4444))),
+            child: const Text(
+              'Delete',
+              style: TextStyle(color: Color(0xFF801A1A)),
+            ),
           ),
         ],
       ),
@@ -125,7 +129,7 @@ class _UserDbScreenState extends State<UserDbScreen> {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (ctx) {
         return StatefulBuilder(
@@ -144,7 +148,7 @@ class _UserDbScreenState extends State<UserDbScreen> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF1E293B),
+                          color: Colors.black87,
                         ),
                       ),
                       TextButton(
@@ -155,7 +159,10 @@ class _UserDbScreenState extends State<UserDbScreen> {
                           });
                           setState(() {});
                         },
-                        child: const Text('Reset'),
+                        child: const Text(
+                          'Reset',
+                          style: TextStyle(color: Color(0xFF801A1A)),
+                        ),
                       ),
                     ],
                   ),
@@ -164,7 +171,7 @@ class _UserDbScreenState extends State<UserDbScreen> {
                     'Role',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF64748B),
+                      color: Colors.grey,
                       fontSize: 13,
                     ),
                   ),
@@ -176,9 +183,9 @@ class _UserDbScreenState extends State<UserDbScreen> {
                       return ChoiceChip(
                         label: Text(role),
                         selected: selected,
-                        selectedColor: const Color(0xFF1E293B),
+                        selectedColor: const Color(0xFF333230),
                         labelStyle: TextStyle(
-                          color: selected ? Colors.white : const Color(0xFF1E293B),
+                          color: selected ? Colors.white : Colors.black87,
                           fontWeight: FontWeight.w500,
                         ),
                         onSelected: (_) {
@@ -193,14 +200,14 @@ class _UserDbScreenState extends State<UserDbScreen> {
                     'Status',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF64748B),
+                      color: Colors.grey,
                       fontSize: 13,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Wrap(
                     spacing: 8,
-                    children: ['All', 'active', 'inactive', 'banned'].map((s) {
+                    children: ['All', 'active', 'inactive'].map((s) {
                       final selected = _selectedStatus == s;
                       final label = s == 'All'
                           ? 'All'
@@ -208,9 +215,9 @@ class _UserDbScreenState extends State<UserDbScreen> {
                       return ChoiceChip(
                         label: Text(label),
                         selected: selected,
-                        selectedColor: const Color(0xFF1E293B),
+                        selectedColor: const Color(0xFF333230),
                         labelStyle: TextStyle(
-                          color: selected ? Colors.white : const Color(0xFF1E293B),
+                          color: selected ? Colors.white : Colors.black87,
                           fontWeight: FontWeight.w500,
                         ),
                         onSelected: (_) {
@@ -220,15 +227,15 @@ class _UserDbScreenState extends State<UserDbScreen> {
                       );
                     }).toList(),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF1E293B),
+                        backgroundColor: const Color(0xFF333230),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                       ),
                       onPressed: () => Navigator.pop(ctx),
@@ -254,64 +261,68 @@ class _UserDbScreenState extends State<UserDbScreen> {
         _selectedRole != 'All' || _selectedStatus != 'All';
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF1F5F9),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1E293B)),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'User Database',
-          style: TextStyle(
-            color: Color(0xFF1E293B),
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-        ),
-        centerTitle: true,
-        actions: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.filter_list, color: Color(0xFF1E293B)),
-                onPressed: _showFilterSheet,
-              ),
-              if (hasActiveFilters)
-                Positioned(
-                  top: 10,
-                  right: 10,
-                  child: Container(
-                    width: 8,
-                    height: 8,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFEF4444),
-                      shape: BoxShape.circle,
-                    ),
+      backgroundColor: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(70),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 34, vertical: 15),
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(Icons.arrow_back, color: Colors.black),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+                const SizedBox(width: 16),
+                const Text(
+                  'User Database',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
                   ),
                 ),
-            ],
+                const Spacer(),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.filter_list, color: Colors.black),
+                      onPressed: _showFilterSheet,
+                    ),
+                    if (hasActiveFilters)
+                      Positioned(
+                        top: 10,
+                        right: 10,
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF801A1A),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ],
+        ),
       ),
       body: Column(
         children: [
-          // Summary bar
-          Container(
-            color: Colors.white,
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-            child: Row(
-              children: [
-                Text(
-                  '${filtered.length} user${filtered.length != 1 ? 's' : ''}',
-                  style: const TextStyle(
-                    color: Color(0xFF64748B),
-                    fontSize: 13,
+          if (hasActiveFilters)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 4, 24, 0),
+              child: Row(
+                children: [
+                  Text(
+                    '${filtered.length} user${filtered.length != 1 ? 's' : ''}',
+                    style: const TextStyle(color: Colors.grey, fontSize: 13),
                   ),
-                ),
-                if (hasActiveFilters) ...[
                   const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () => setState(() {
@@ -320,9 +331,9 @@ class _UserDbScreenState extends State<UserDbScreen> {
                     }),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 3),
+                          horizontal: 10, vertical: 3),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFEF4444).withOpacity(0.1),
+                        color: const Color(0xFF801A1A).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: const Row(
@@ -331,28 +342,24 @@ class _UserDbScreenState extends State<UserDbScreen> {
                           Text(
                             'Clear filters',
                             style: TextStyle(
-                              color: Color(0xFFEF4444),
+                              color: Color(0xFF801A1A),
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                           SizedBox(width: 4),
-                          Icon(Icons.close,
-                              size: 12, color: Color(0xFFEF4444)),
+                          Icon(Icons.close, size: 12, color: Color(0xFF801A1A)),
                         ],
                       ),
                     ),
                   ),
                 ],
-              ],
+              ),
             ),
-          ),
-
-          // List
           Expanded(
             child: RefreshIndicator(
               onRefresh: _onRefresh,
-              color: const Color(0xFF1E293B),
+              color: const Color(0xFF333230),
               child: _isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : filtered.isEmpty
@@ -363,14 +370,12 @@ class _UserDbScreenState extends State<UserDbScreen> {
                               child: Column(
                                 children: [
                                   Icon(Icons.person_off_outlined,
-                                      size: 48, color: Color(0xFFCBD5E1)),
+                                      size: 48, color: Colors.grey),
                                   SizedBox(height: 12),
                                   Text(
                                     'No users found',
                                     style: TextStyle(
-                                      color: Color(0xFF94A3B8),
-                                      fontSize: 15,
-                                    ),
+                                        color: Colors.grey, fontSize: 15),
                                   ),
                                 ],
                               ),
@@ -378,18 +383,14 @@ class _UserDbScreenState extends State<UserDbScreen> {
                           ],
                         )
                       : ListView.builder(
-                          padding: const EdgeInsets.only(top: 8, bottom: 24),
+                          padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
                           itemCount: filtered.length,
                           itemBuilder: (context, index) {
                             final user = filtered[index];
                             return UserCard(
                               user: user,
-                              onView: () {
-                                // TODO: navigate to user detail screen
-                              },
-                              onEdit: () {
-                                // TODO: show edit dialog/screen
-                              },
+                              onView: () {},
+                              onEdit: () {},
                               onDelete: () => _showDeleteDialog(user),
                             );
                           },

@@ -4,6 +4,7 @@ import 'package:flutter_final_project_kintkin/AdminWidgets/StatisticsCard.dart';
 import 'package:flutter_final_project_kintkin/AdminWidgets/api_status_card.dart';
 import 'package:flutter_final_project_kintkin/AdminWidgets/event_leaderboard_card.dart';
 import 'package:flutter_final_project_kintkin/Pages/user_db_screen.dart';
+import 'package:flutter_final_project_kintkin/Pages/active_events_page.dart';
 
 
 import '../AdminWidgets/adminDrawer.dart';
@@ -123,13 +124,15 @@ class _AdminScreenState extends State<AdminScreen> {
                     children: [
                       Expanded(
                         child: GestureDetector(
-                          // onTap: () => Navigator.push(
-                          //   // context,
-                          //   // MaterialPageRoute(builder: (context) => EventScreen()),
-                          // ),
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const ActiveEventsPage(),
+                            ),
+                          ),
                           child: StatCard(
                             title: 'Active Events',
-                            value: '12',
+                            value: activeEvents.toString(),
                             icon: Icons.event_available,
                             isSmall: true,
                           ),
