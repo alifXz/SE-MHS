@@ -6,7 +6,6 @@ import '../widgets/explore_card.dart';
 import '../widgets/search_bar.dart';
 
 class ExploreScreen extends StatefulWidget {
-
   const ExploreScreen({super.key});
 
   @override
@@ -14,13 +13,12 @@ class ExploreScreen extends StatefulWidget {
 }
 
 class _ExploreScreenState extends State<ExploreScreen> {
-
   bool isEventsSelected = true;
 
   List<dynamic> _events = [];
   bool _loading = true;
 
-  Set<String> _selectedFilters = {}; 
+  Set<String> _selectedFilters = {};
 
   final TextEditingController _searchController = TextEditingController();
 
@@ -33,7 +31,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   Future<void> _loadEvents() async {
     final events = await EventService().getUpcomingEvents();
 
-    if(!mounted) return;
+    if (!mounted) return;
 
     setState(() {
       _events = events;
@@ -41,80 +39,80 @@ class _ExploreScreenState extends State<ExploreScreen> {
     });
   }
 
-  void dispose(){
+  @override
+  void dispose() {
     _searchController.dispose();
     super.dispose();
   }
 
-  Future<void> _performSearch(String query) async {
-    if (query.trim().isEmpty) {
-      await _loadEvents();
-      return;
-    }
+  List<dynamic> get _filteredEvents {
+    return _events.where((event) {
+      // category filter
+      final passesCategory = _selectedFilters.isEmpty ||
+          _selectedFilters.contains(event.category?.toString().toLowerCase());
 
+      // search filter
+      final query = _searchController.text.trim().toLowerCase();
+      final passesSearch = query.isEmpty ||
+          (event.title?.toString().toLowerCase().contains(query) ?? false) ||
+          (event.description?.toString().toLowerCase().contains(query) ?? false);
 
-    setState(() {
-      _loading = true;
-    });
-
-    final results = await EventService().searchEvents(query);
-
-    if (!mounted) return;
-
-    setState(() {
-      _events = results;
-      _loading = false;
-    });
+      return passesCategory && passesSearch;
+    }).toList();
   }
-  
-    //FILTER buat yg category
-    Future<void> _openFilter() async {
+
+  Future<void> _performSearch(String query) async {
+    if (_events.isEmpty) await _loadEvents();
+    setState(() {});
+  }
+
+  Future<void> _openFilter() async {
     final result = await showFilterSheet(
       context,
       initialSelected: _selectedFilters,
     );
-    //Nanti backendnya send ke _selectedFilters
+
     if (result != null) {
       setState(() => _selectedFilters = result);
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const AppDrawer(),
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(70),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 34, vertical: 15),
-              child: Row(
-                children: [
-                  const Text(
-                    "Find Your Event/Community!",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),
+        preferredSize: const Size.fromHeight(70),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 34, vertical: 15),
+            child: Row(
+              children: [
+                const Text(
+                  "Find Your Event/Community!",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
                   ),
-                  const Spacer(),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.notifications_none, color: Colors.black),
+                ),
+                const Spacer(),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.notifications_none, color: Colors.black),
+                ),
+                Builder(
+                  builder: (context) => IconButton(
+                    onPressed: () => Scaffold.of(context).openDrawer(),
+                    icon: const Icon(Icons.menu, color: Colors.black),
                   ),
-                 Builder(
-                    builder: (context) => IconButton(
-                      onPressed: () => Scaffold.of(context).openDrawer(),
-                      icon: const Icon(Icons.menu, color: Colors.black),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
+      ),
       body: Column(
         children: [
           Padding(
@@ -126,10 +124,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     controller: _searchController,
                     onSearch: _performSearch,
                     onClear: () {
-                      setState(() {
-                        _searchController.clear();
-                        _performSearch('');
-                      });
+                      _searchController.clear();
+                      setState(() {});
                     },
                   ),
                 ),
@@ -156,27 +152,32 @@ class _ExploreScreenState extends State<ExploreScreen> {
               ],
             ),
           ),
-          
+
           // --- DYNAMIC LIST SECTION ---
           Expanded(
             child: _loading
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : ListView.builder(
-                padding: const EdgeInsets.all(20),
-                itemCount: _events.length,
-                itemBuilder: (context, index) {
-                  final event = _events[index];
-
-                  return ExploreCard(isCommunity: !isEventsSelected, event: event);
-                }, 
-            ),
+                ? const Center(child: CircularProgressIndicator())
+                : _filteredEvents.isEmpty
+                    ? const Center(
+                        child: Text(
+                          'No events found.',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      )
+                    : ListView.builder(
+                        padding: const EdgeInsets.all(20),
+                        itemCount: _filteredEvents.length,
+                        itemBuilder: (context, index) {
+                          final event = _filteredEvents[index];
+                          return ExploreCard(
+                            isCommunity: !isEventsSelected,
+                            event: event,
+                          );
+                        },
+                      ),
           ),
         ],
       ),
-      
     );
   }
-
 }
