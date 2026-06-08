@@ -8,6 +8,9 @@ class SupabaseService {
     required EventModel event,
   }) async {
     final user = Supabase.instance.client.auth.currentUser;
+    final role = user?.appMetadata['role'] ?? 'user';
+
+    final isAdmin = role == 'admin';
 
     if (user == null) {
       throw Exception('User not logged in');

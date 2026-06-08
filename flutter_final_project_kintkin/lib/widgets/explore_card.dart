@@ -12,6 +12,68 @@ class ExploreCard extends StatelessWidget {
     required this.event,
   });
 
+  Color _getCategoryColor() {
+    switch (event.category.toLowerCase()) {
+      case 'sports':
+        return const Color(0xFF801A1A);
+
+      case 'gaming':
+        return Colors.purple;
+
+      case 'music':
+        return Colors.orange;
+
+      case 'group activity':
+        return Colors.blue;
+
+      case 'board games':
+        return Colors.teal;
+
+      case 'cooking':
+        return Colors.deepOrange;
+
+      case 'art':
+        return Colors.pinkAccent;
+
+      case 'others':
+        return Colors.green;
+
+      default:
+        return const Color(0xFFD81B60);
+    }
+  }
+
+  IconData _getCategoryIcon() {
+    switch (event.category.toLowerCase()) {
+      case 'sports':
+        return Icons.directions_run;
+
+      case 'gaming':
+        return Icons.sports_esports;
+
+      case 'music':
+        return Icons.music_note;
+
+      case 'group activity':
+        return Icons.groups;
+
+      case 'board games':
+        return Icons.casino;
+
+      case 'cooking':
+        return Icons.restaurant;
+
+      case 'art':
+        return Icons.palette;
+
+      case 'others':
+        return Icons.style;
+
+      default:
+        return Icons.event;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return isCommunity ? _buildCommunityCard() : _buildEventCard(context);
@@ -111,10 +173,10 @@ class ExploreCard extends StatelessWidget {
                       width: 38,
                       height: 38,
                       decoration: const BoxDecoration(
-                        color: Color(0xFFFFC107),
+                        color: Color(0xFFFFD700),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.directions_run, color: Colors.black, size: 20),
+                      child: Icon(_getCategoryIcon(), color: Colors.black, size: 20),
                     ),
                   ),
                 ],
@@ -219,11 +281,11 @@ Widget _buildCommunityCard() {
               child: Container(
                 width: 44,
                 height: 44,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFFFC107),
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFD700),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.directions_run, color: Colors.black, size: 24),
+                child: Icon(_getCategoryIcon(), color: Colors.black, size: 24),
               ),
             ),
           ],
