@@ -44,20 +44,7 @@ class Admindrawer extends StatelessWidget {
                 );
               }
             ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.group, color: Colors.black),
-              title: const Text('Create Community'),
-              onTap:() {
-                 Navigator.of(context).pop();
-
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const CreatecommunityScreen(),
-                  ),
-                );
-              },
-            ),
+            
              const Divider(),
             ListTile(
               leading: const Icon(Icons.edit_calendar, color: Colors.black),

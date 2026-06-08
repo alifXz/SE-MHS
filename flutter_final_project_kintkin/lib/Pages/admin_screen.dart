@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/AdminWidgets/StatisticsCard.dart';
+import 'package:flutter_final_project_kintkin/AdminWidgets/api_status_card.dart';
+import 'package:flutter_final_project_kintkin/AdminWidgets/event_leaderboard_card.dart';
 import '../AdminWidgets/adminDrawer.dart';
 class AdminScreen extends StatelessWidget {
   const AdminScreen({super.key});
@@ -60,6 +62,10 @@ class AdminScreen extends StatelessWidget {
               value: 'Rp 16.000.000',
               icon: Icons.account_balance_wallet,
             ),
+            const SizedBox(height: 16),
+            const ApiStatusCard(),
+            const SizedBox(height: 16),
+            const EventLeaderboardCard(),
           ],
         ),
       ),
