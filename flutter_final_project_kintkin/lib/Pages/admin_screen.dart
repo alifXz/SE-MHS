@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/AdminWidgets/StatisticsCard.dart';
 import 'package:flutter_final_project_kintkin/AdminWidgets/api_status_card.dart';
 import 'package:flutter_final_project_kintkin/AdminWidgets/event_leaderboard_card.dart';
+import 'package:flutter_final_project_kintkin/Pages/user_db_screen.dart';
+
 
 import '../AdminWidgets/adminDrawer.dart';
 import '../services/admin_service.dart';
@@ -120,22 +122,32 @@ class _AdminScreenState extends State<AdminScreen> {
                   Row(
                     children: [
                       Expanded(
-                        child: StatCard(
-                          title: 'Active Events',
-                          value: activeEvents.toString(),
-                          icon: Icons.event_available,
-                          isSmall: true,
+                        child: GestureDetector(
+                          // onTap: () => Navigator.push(
+                          //   // context,
+                          //   // MaterialPageRoute(builder: (context) => EventScreen()),
+                          // ),
+                          child: StatCard(
+                            title: 'Active Events',
+                            value: '12',
+                            icon: Icons.event_available,
+                            isSmall: true,
+                          ),
                         ),
                       ),
-
                       const SizedBox(width: 16),
-
                       Expanded(
-                        child: StatCard(
-                          title: 'Users',
-                          value: totalUsers.toString(),
-                          icon: Icons.person_2_rounded,
-                          isSmall: true,
+                        child: GestureDetector(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => UserDbScreen()),  // ← closing ) was missing
+                          ),
+                          child: StatCard(
+                            title: 'Users',
+                            value: '4',
+                            icon: Icons.person_2_rounded,
+                            isSmall: true,
+                          ),
                         ),
                       ),
                     ],
