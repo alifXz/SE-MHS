@@ -1,20 +1,78 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_final_project_kintkin/AdminWidgets/StatisticsCard.dart';
 import 'package:flutter_final_project_kintkin/AdminWidgets/api_status_card.dart';
 import 'package:flutter_final_project_kintkin/AdminWidgets/event_leaderboard_card.dart';
+
 import '../AdminWidgets/adminDrawer.dart';
-class AdminScreen extends StatelessWidget {
+import '../services/admin_service.dart';
+
+import 'package:intl/intl.dart';
+
+class AdminScreen extends StatefulWidget {
   const AdminScreen({super.key});
 
   @override
+  State<AdminScreen> createState() => _AdminScreenState();
+}
+
+class _AdminScreenState extends State<AdminScreen> {
+  int totalParticipants = 0;
+  int activeEvents = 0;
+  int totalRevenue = 0;
+  int totalUsers = 0;
+
+  bool loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadDashboard();
+  }
+
+  Future<void> loadDashboard() async {
+    final service = AdminService();
+
+    try {
+      final participants = await service.getTotalParticipants();
+      final active = await service.getActiveEvents();
+      final revenue = await service.getTotalRevenue();
+      final users = await service.getTotalUsers();
+
+      if (!mounted) return;
+      
+      setState(() {
+        totalParticipants = participants;
+        activeEvents = active;
+        totalRevenue = revenue;
+        totalUsers = users;
+        loading = false;
+      });
+    } catch (e) {
+      debugPrint('Dashboard Error: $e');
+
+      if (!mounted) return;
+
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final formattedRevenue = NumberFormat.decimalPattern('id_ID').format(totalRevenue);
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 237, 237, 237),
-      appBar:  AppBar(
+
+      appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: Builder(
           builder: (context) => IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black87),
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.black87,
+            ),
             onPressed: () => Navigator.pop(context),
           ),
         ),
@@ -30,57 +88,77 @@ class AdminScreen extends StatelessWidget {
         actions: [
           Builder(
             builder: (context) => IconButton(
-              icon: const Icon(Icons.menu, color: Colors.black87),
-              onPressed: () => Scaffold.of(context).openEndDrawer(),
+              icon: const Icon(
+                Icons.menu,
+                color: Colors.black87,
+              ),
+              onPressed: () =>
+                  Scaffold.of(context).openEndDrawer(),
             ),
           ),
         ],
       ),
+
       endDrawer: const Admindrawer(),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          children: [
-            const StatCard(
-              title: 'Total Participants Joined :',
-              value: '20',
-              icon: Icons.groups,
-            ),
-            const SizedBox(height: 16),
-            const Row(
-              children: [
-                Expanded(
-                  child: StatCard(
-                    title: 'Active Events',
-                    value: '12',
-                    icon: Icons.event_available,
-                    isSmall: true,
+
+      body: loading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                children: [
+                  StatCard(
+                    title: 'Total Participants Joined',
+                    value: totalParticipants.toString(),
+                    icon: Icons.groups,
                   ),
-                ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: StatCard(
-                    title: 'Users',
-                    value: '4',
-                    icon: Icons.person_2_rounded,
-                    isSmall: true,
+
+                  const SizedBox(height: 16),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: StatCard(
+                          title: 'Active Events',
+                          value: activeEvents.toString(),
+                          icon: Icons.event_available,
+                          isSmall: true,
+                        ),
+                      ),
+
+                      const SizedBox(width: 16),
+
+                      Expanded(
+                        child: StatCard(
+                          title: 'Users',
+                          value: totalUsers.toString(),
+                          icon: Icons.person_2_rounded,
+                          isSmall: true,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+
+                  const SizedBox(height: 16),
+
+                  StatCard(
+                    title: 'Total Revenue',
+                    value: 'Rp $formattedRevenue',
+                    icon: Icons.account_balance_wallet,
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  const ApiStatusCard(),
+
+                  const SizedBox(height: 16),
+
+                  const EventLeaderboardCard(),
+                ],
+              ),
             ),
-            const SizedBox(height: 16),
-            const StatCard(
-              title: 'Total Revenue :',
-              value: 'Rp 16.000.000',
-              icon: Icons.account_balance_wallet,
-            ),
-            const SizedBox(height: 16),
-            const ApiStatusCard(),
-            const SizedBox(height: 16),
-            const EventLeaderboardCard(),
-          ],
-        ),
-      ),
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_final_project_kintkin/Pages/CreateCommunity_screen.dart';
 import 'package:flutter_final_project_kintkin/Pages/event_screen.dart';
 import 'package:flutter_final_project_kintkin/Pages/history_page.dart';
 import 'package:flutter_final_project_kintkin/Pages/login_screen.dart';
