@@ -12,7 +12,7 @@ class CategoryDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> categories = ['Sports', 'Gaming', 'Group Activity', 'Music', 'Others'];
+    final List<String> categories = ['Sports', 'Gaming', 'Board Games', 'Group Activity', 'Cooking', 'Music', 'Art', 'Others'];
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),

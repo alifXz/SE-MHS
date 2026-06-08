@@ -12,15 +12,55 @@ class FilterCategory {
     required this.icon,
   });
 }
+
 const List<FilterCategory> kFilterCategories = [
-  FilterCategory(id: 'sports', label: 'Sports', icon: Icons.directions_run),
-  FilterCategory(id: 'art', label: 'Art', icon: Icons.palette),
-  FilterCategory(id: 'games', label: 'Games', icon: Icons.casino),
-  FilterCategory(id: 'gaming', label: 'Gaming', icon: Icons.sports_esports),
-  FilterCategory(id: 'cooking', label: 'Cooking', icon: Icons.restaurant),
-  FilterCategory(id: 'football', label: 'Football', icon: Icons.sports_soccer),
-  FilterCategory(id: 'music', label: 'Music', icon: Icons.music_note),
-  FilterCategory(id: 'others', label: 'Others', icon: Icons.style),
+  FilterCategory(
+    id: 'sports',
+    label: 'Sports',
+    icon: Icons.directions_run,
+  ),
+
+  FilterCategory(
+    id: 'gaming',
+    label: 'Gaming',
+    icon: Icons.sports_esports,
+  ),
+
+  FilterCategory(
+    id: 'music',
+    label: 'Music',
+    icon: Icons.music_note,
+  ),
+
+  FilterCategory(
+    id: 'group activity',
+    label: 'Group',
+    icon: Icons.groups,
+  ),
+
+  FilterCategory(
+    id: 'board games',
+    label: 'Board Games',
+    icon: Icons.casino,
+  ),
+
+  FilterCategory(
+    id: 'cooking',
+    label: 'Cooking',
+    icon: Icons.restaurant,
+  ),
+
+  FilterCategory(
+    id: 'art',
+    label: 'Art',
+    icon: Icons.palette,
+  ),
+
+  FilterCategory(
+    id: 'others',
+    label: 'Others',
+    icon: Icons.style,
+  ),
 ];
 
 Future<Set<String>?> showFilterSheet(

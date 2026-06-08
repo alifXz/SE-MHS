@@ -25,6 +25,15 @@ class BasicCard extends StatelessWidget {
       case 'group activity':
         return Colors.blue;
 
+      case 'board games':
+        return Colors.teal;
+
+      case 'cooking':
+        return Colors.deepOrange;
+
+      case 'art':
+        return Colors.pinkAccent;
+
       case 'others':
         return Colors.green;
 
@@ -47,8 +56,17 @@ class BasicCard extends StatelessWidget {
       case 'group activity':
         return Icons.groups;
 
+      case 'board games':
+        return Icons.casino;
+
+      case 'cooking':
+        return Icons.restaurant;
+
+      case 'art':
+        return Icons.palette;
+
       case 'others':
-        return Icons.event;
+        return Icons.style;
 
       default:
         return Icons.event;

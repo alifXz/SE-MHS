@@ -50,8 +50,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
     if (query.trim().isEmpty) {
       await _loadEvents();
       return;
-
-
     }
 
 
@@ -81,8 +79,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
     }
   }
   
-    
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

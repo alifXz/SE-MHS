@@ -25,11 +25,20 @@ class EventCard extends StatelessWidget {
       case 'gaming':
         return Colors.purple;
 
-      case 'group activitiy':
-        return Colors.orange;
-      
       case 'music':
+        return Colors.orange;
+
+      case 'group activity':
         return Colors.blue;
+
+      case 'board games':
+        return Colors.teal;
+
+      case 'cooking':
+        return Colors.deepOrange;
+
+      case 'art':
+        return Colors.pinkAccent;
 
       case 'others':
         return Colors.green;
@@ -47,14 +56,23 @@ class EventCard extends StatelessWidget {
       case 'gaming':
         return Icons.sports_esports;
 
-      case 'group activity':
-        return Icons.groups;
-
       case 'music':
         return Icons.music_note;
 
+      case 'group activity':
+        return Icons.groups;
+
+      case 'board games':
+        return Icons.casino;
+
+      case 'cooking':
+        return Icons.restaurant;
+
+      case 'art':
+        return Icons.palette;
+
       case 'others':
-        return Icons.event;
+        return Icons.style;
 
       default:
         return Icons.event;
