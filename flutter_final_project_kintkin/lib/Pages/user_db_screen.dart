@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/AdminWidgets/user_card.dart';
+import 'package:flutter_final_project_kintkin/models/user_model.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class UserDbScreen extends StatefulWidget {
   const UserDbScreen({super.key});
@@ -9,66 +11,69 @@ class UserDbScreen extends StatefulWidget {
 }
 
 class _UserDbScreenState extends State<UserDbScreen> {
-  bool _isLoading = false;
-
-  final List<UserModel> _allUsers = [
-    UserModel(
-      id: 'USR001',
-      name: 'Alice Johnson',
-      email: 'alice@example.com',
-      phone: '+62 811 1111 1111',
-      role: 'Admin',
-      joinDate: DateTime(2023, 1, 10),
-    ),
-    UserModel(
-      id: 'USR002',
-      name: 'Bob Smith',
-      email: 'bob@example.com',
-      phone: '+62 822 2222 2222',
-      role: 'User',
-      joinDate: DateTime(2023, 5, 22),
-    ),
-    UserModel(
-      id: 'USR003',
-      name: 'Clara Lee',
-      email: 'clara@example.com',
-      phone: '+62 833 3333 3333',
-      role: 'User',
-      joinDate: DateTime(2023, 8, 3),
-    ),
-    UserModel(
-      id: 'USR004',
-      name: 'David Kim',
-      email: 'david@example.com',
-      phone: '+62 844 4444 4444',
-      role: 'User',
-      joinDate: DateTime(2024, 2, 14),
-    ),
-    UserModel(
-      id: 'USR005',
-      name: 'Eva Martinez',
-      email: 'eva@example.com',
-      phone: '+62 855 5555 5555',
-      role: 'User',
-      joinDate: DateTime(2024, 4, 1),
-    ),
-    UserModel(
-      id: 'USR006',
-      name: 'Frank Chen',
-      email: 'frank@example.com',
-      phone: '+62 866 6666 6666',
-      role: 'User',
-      joinDate: DateTime(2024, 6, 19),
-    ),
-  ];
-
+  bool _isLoading = true;
+  List<UserModel> _allUsers = [];
   String _selectedRole = 'All';
-  String _selectedStatus = 'All';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUsers();
+  }
+
+  Future<void> _loadUsers() async {
+    setState(() => _isLoading = true);
+
+    try {
+      final response = await Supabase.instance.client
+          .from('users')
+          .select()
+          .order('join_date', ascending: false);
+
+      if (!mounted) return;
+
+      setState(() {
+        _allUsers = response
+            .map((row) => UserModel.fromJson(row))
+            .toList();
+        _isLoading = false;
+      });
+    } catch (e) {
+      debugPrint('Error loading users: $e');
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _onRefresh() async {
+    await _loadUsers();
+  }
+
+  Future<void> _deleteUser(UserModel user) async {
+    try {
+      await Supabase.instance.client
+          .from('users')
+          .delete()
+          .eq('id', user.id);
+
+      setState(() => _allUsers.removeWhere((u) => u.id == user.id));
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${user.name} deleted')),
+      );
+    } catch (e) {
+      debugPrint('Error deleting user: $e');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to delete user')),
+      );
+    }
+  }
 
   List<String> get _roles {
     final roles = _allUsers
         .map((u) => u.role)
-        .where((r) => r != 'Moderator')
         .toSet()
         .toList()
       ..sort();
@@ -77,16 +82,8 @@ class _UserDbScreenState extends State<UserDbScreen> {
 
   List<UserModel> get _filteredUsers {
     return _allUsers.where((u) {
-      final roleMatch = _selectedRole == 'All' || u.role == _selectedRole;
-      
-      return roleMatch;
+      return _selectedRole == 'All' || u.role == _selectedRole;
     }).toList();
-  }
-
-  Future<void> _onRefresh() async {
-    setState(() => _isLoading = true);
-    await Future.delayed(const Duration(seconds: 1));
-    setState(() => _isLoading = false);
   }
 
   void _showDeleteDialog(UserModel user) {
@@ -104,9 +101,7 @@ class _UserDbScreenState extends State<UserDbScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(ctx);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('${user.name} deleted')),
-              );
+              _deleteUser(user);
             },
             child: const Text(
               'Delete',
@@ -146,10 +141,7 @@ class _UserDbScreenState extends State<UserDbScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          setSheetState(() {
-                            _selectedRole = 'All';
-                            _selectedStatus = 'All';
-                          });
+                          setSheetState(() => _selectedRole = 'All');
                           setState(() {});
                         },
                         child: const Text(
@@ -218,8 +210,7 @@ class _UserDbScreenState extends State<UserDbScreen> {
   @override
   Widget build(BuildContext context) {
     final filtered = _filteredUsers;
-    final hasActiveFilters =
-        _selectedRole != 'All' || _selectedStatus != 'All';
+    final hasActiveFilters = _selectedRole != 'All';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -286,13 +277,9 @@ class _UserDbScreenState extends State<UserDbScreen> {
                   ),
                   const SizedBox(width: 8),
                   GestureDetector(
-                    onTap: () => setState(() {
-                      _selectedRole = 'All';
-                      _selectedStatus = 'All';
-                    }),
+                    onTap: () => setState(() => _selectedRole = 'All'),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 3),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                       decoration: BoxDecoration(
                         color: const Color(0xFF801A1A).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(20),
@@ -335,8 +322,7 @@ class _UserDbScreenState extends State<UserDbScreen> {
                                   SizedBox(height: 12),
                                   Text(
                                     'No users found',
-                                    style: TextStyle(
-                                        color: Colors.grey, fontSize: 15),
+                                    style: TextStyle(color: Colors.grey, fontSize: 15),
                                   ),
                                 ],
                               ),

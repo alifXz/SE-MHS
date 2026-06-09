@@ -1,22 +1,5 @@
 import 'package:flutter/material.dart';
-
-class UserModel {
-  final String id;
-  final String name;
-  final String email;
-  final String phone;
-  final String role;
-  final DateTime joinDate;
-
-  const UserModel({
-    required this.id,
-    required this.name,
-    required this.email,
-    required this.phone,
-    required this.role,
-    required this.joinDate,
-  });
-}
+import 'package:flutter_final_project_kintkin/models/user_model.dart';
 
 class UserCard extends StatelessWidget {
   final UserModel user;
@@ -92,62 +75,64 @@ class UserCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                      // User ID top-left
-                      Text(
-                        '#${user.id}',
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: Colors.grey.shade400,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0.4,
-                        ),
+                  Text(
+                    '#${user.id}',
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: Colors.grey.shade400,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.4,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    user.name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1B4F6B).withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      user.role,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: Color(0xFF1B4F6B),
+                        fontWeight: FontWeight.w600,
                       ),
-                      const SizedBox(height: 2),
-                      Text(
-                          user.name,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      const SizedBox(height: 4),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF1B4F6B).withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          user.role,
-                          style: const TextStyle(
-                            fontSize: 11,
-                            color: Color(0xFF1B4F6B),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                    ),
+                  ),
+                  const Spacer(),
+                  _detailRow(Icons.email_outlined, user.email),
+                  const SizedBox(height: 3),
+                  // handle nullable phoneNumber
+                  _detailRow(Icons.phone_outlined, user.phoneNumber ?? 'No phone'),
+                  const SizedBox(height: 3),
+                  // handle nullable joinDate
+                  _detailRow(
+                    Icons.calendar_today_outlined,
+                    user.joinDate != null
+                        ? '${user.joinDate!.day}/${user.joinDate!.month}/${user.joinDate!.year}'
+                        : 'Unknown',
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      _actionIcon(
+                        Icons.delete_outline,
+                        const Color(0xFF801A1A),
+                        onDelete,
                       ),
-                      const Spacer(),
-                      _detailRow(Icons.email_outlined, user.email),
-                      const SizedBox(height: 3),
-                      _detailRow(Icons.phone_outlined, user.phone),
-                      const SizedBox(height: 3),
-                      _detailRow(
-                        Icons.calendar_today_outlined,
-                        '${user.joinDate.day}/${user.joinDate.month}/${user.joinDate.year}',
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          _actionIcon(
-                            Icons.delete_outline,
-                            const Color(0xFF801A1A),
-                            onDelete,
-                          ),
-                        ],
-                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../widgets/auth_logo.dart';
 import '../widgets/event_input.dart';
 import '../widgets/event_category.dart';
@@ -16,6 +17,7 @@ class EditEventPage extends StatefulWidget {
 class _EditEventPageState extends State<EditEventPage> {
   DateTime? _selectedDate;
   String? _selectedCategory;
+  bool _isSaving = false; // add this
 
   late final TextEditingController _eventNameController;
   late final TextEditingController _descriptionController;
@@ -111,8 +113,52 @@ class _EditEventPageState extends State<EditEventPage> {
     }
   }
 
-  void _saveChanges() {
-    Navigator.pop(context, true);
+  // Only this method changed significantly
+  Future<void> _saveChanges() async {
+    final eventId = widget.event['id'];
+
+    if (eventId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error: Event ID not found')),
+      );
+      return;
+    }
+
+    setState(() => _isSaving = true);
+
+    try {
+      await Supabase.instance.client.from('events').update({
+        'title': _eventNameController.text.trim(),
+        'description': _descriptionController.text.trim(),
+        'organizer': _organizerController.text.trim(),
+        'image_url': _imageUrlController.text.trim(),
+        'venue_partner': _venuePartnerController.text.trim(),
+        'price': int.tryParse(_priceController.text.trim()) ?? 0,
+        'category': _selectedCategory,
+        'location': _locationController.text.trim(),
+        'location_link': _mapsLinkController.text.trim(),
+        'start_time': _startTimeController.text.trim(),
+        'end_time': _endTimeController.text.trim(),
+        'event_date': _dateController.text.trim(),
+      }).eq('id', eventId);
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Event updated successfully!')),
+      );
+
+      Navigator.pop(context, true); // true = signal to parent to refresh
+
+    } catch (e) {
+      debugPrint('Error updating event: $e');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to update event: $e')),
+      );
+    } finally {
+      if (mounted) setState(() => _isSaving = false);
+    }
   }
 
   @override
@@ -147,7 +193,6 @@ class _EditEventPageState extends State<EditEventPage> {
               ),
 
               const AuthLogo(),
-
               const SizedBox(height: 24),
 
               const Text(
@@ -166,61 +211,50 @@ class _EditEventPageState extends State<EditEventPage> {
                 hintText: 'Sports gathering',
                 controller: _eventNameController,
               ),
-
               EventName(
                 label: 'Description',
                 hintText: 'Describe your event',
                 controller: _descriptionController,
                 maxLines: 3,
               ),
-
               EventName(
                 label: 'Organizer',
                 hintText: 'Kith & Kin',
                 controller: _organizerController,
               ),
-
               EventName(
                 label: 'Image URL',
                 hintText: 'https://images.unsplash.com/...',
                 controller: _imageUrlController,
               ),
-
               EventName(
                 label: 'Venue Partner',
                 hintText: 'Binus University',
                 controller: _venuePartnerController,
               ),
-
               EventName(
                 label: 'Price',
                 hintText: '50000',
                 controller: _priceController,
                 keyboardType: TextInputType.number,
               ),
-
               CategoryDropdown(
                 selectedValue: _selectedCategory,
                 onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedCategory = newValue;
-                  });
+                  setState(() => _selectedCategory = newValue);
                 },
               ),
-
               EventName(
                 label: 'Location',
                 hintText: 'BINUS Alam Sutera',
                 controller: _locationController,
               ),
-
               EventName(
                 label: 'Location Link',
                 hintText: 'Paste Google Maps link here',
                 controller: _mapsLinkController,
                 suffixIcon: Icons.map_outlined,
               ),
-
               EventName(
                 label: 'Start Time',
                 hintText: 'Select start time',
@@ -229,7 +263,6 @@ class _EditEventPageState extends State<EditEventPage> {
                 readOnly: true,
                 onTap: () => _selectTime(context, _startTimeController),
               ),
-
               EventName(
                 label: 'End Time',
                 hintText: 'Select end time',
@@ -238,7 +271,6 @@ class _EditEventPageState extends State<EditEventPage> {
                 readOnly: true,
                 onTap: () => _selectTime(context, _endTimeController),
               ),
-
               EventName(
                 label: 'Date',
                 hintText: 'Select a date',
@@ -250,7 +282,10 @@ class _EditEventPageState extends State<EditEventPage> {
 
               const SizedBox(height: 30),
 
-              SubmitEventButton(onPressed: _saveChanges),
+              // Show loading indicator while saving
+              _isSaving
+                  ? const CircularProgressIndicator()
+                  : SubmitEventButton(onPressed: _saveChanges),
 
               const SizedBox(height: 20),
             ],

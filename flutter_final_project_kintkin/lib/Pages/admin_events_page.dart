@@ -4,6 +4,8 @@ import 'package:flutter_final_project_kintkin/models/event_model.dart';
 import 'package:flutter_final_project_kintkin/services/event_service.dart';
 import 'package:flutter_final_project_kintkin/AdminWidgets/admin_event_card.dart';
 
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import 'event_screen.dart';
 
 class AdminEventsPage extends StatefulWidget {
@@ -34,7 +36,52 @@ class _AdminEventsPageState extends State<AdminEventsPage> {
   }
 
   Future<void> _deleteEvent(EventModel event) async {
-    setState(() => _events.removeWhere((e) => e.id == event.id));
+    try {
+      await Supabase.instance.client
+          .from('events')
+          .delete()
+          .eq('id', event.id);
+
+      setState(() => _events.removeWhere((e) => e.id == event.id));
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${event.title} deleted')),
+      );
+    } catch (e) {
+      debugPrint('Error deleting event: $e');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to delete event')),
+      );
+    }
+  }
+
+  void _confirmDelete(EventModel event) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text('Delete Event'),
+        content: Text('Are you sure you want to delete "${event.title}"?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              _deleteEvent(event);
+            },
+            child: const Text(
+              'Delete',
+              style: TextStyle(color: Color(0xFF801A1A)),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _editEvent(EventModel event) async {
@@ -119,7 +166,7 @@ class _AdminEventsPageState extends State<AdminEventsPage> {
                     padding: const EdgeInsets.only(bottom: 16),
                     child: AdminEventCard(
                       event: _events[index],
-                      onDelete: () => _deleteEvent(_events[index]),
+                      onDelete: () => _confirmDelete(_events[index]),
                       onEdit: () => _editEvent(_events[index]),
                     ),
                   ),
