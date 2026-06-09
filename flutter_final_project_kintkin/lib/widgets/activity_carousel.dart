@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/models/event_model.dart';
 import 'package:flutter_final_project_kintkin/services/event_service.dart';
 import 'package:flutter_final_project_kintkin/Pages/history_page.dart';
+import 'package:flutter_final_project_kintkin/services/auth_service.dart';
 
 import 'basic_card.dart';
 
@@ -31,7 +32,11 @@ class _ActivityCarouselState extends State<ActivityCarousel> {
   }
 
   Future<void> loadHistory() async {
-    final result = await EventService().getUserHistory();
+    final service = EventService();
+
+    final result = AuthService.isAdmin
+        ? await service.getPastEvents()   // admin sees all past events
+        : await service.getUserHistory(); // user sees own history
 
     if (!mounted) return;
 
