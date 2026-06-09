@@ -31,7 +31,7 @@ class _ActivityCarouselState extends State<ActivityCarousel> {
   }
 
   Future<void> loadHistory() async {
-    final result = await EventService().getPastEvents();
+    final result = await EventService().getUserHistory();
 
     if (!mounted) return;
 

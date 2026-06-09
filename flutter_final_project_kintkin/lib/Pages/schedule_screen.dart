@@ -70,10 +70,10 @@ class _CalendarState extends State<Calendar>{
                     ),
                   ),
                   const Spacer(),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.notifications_none, color: Colors.black),
-                  ),
+                  // IconButton(
+                  //   onPressed: () {},
+                  //   icon: const Icon(Icons.notifications_none, color: Colors.black),
+                  // ),
                   Builder(
                     builder: (context) => IconButton(
                       onPressed: () => Scaffold.of(context).openDrawer(),

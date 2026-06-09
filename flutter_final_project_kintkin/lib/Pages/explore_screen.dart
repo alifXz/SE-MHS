@@ -98,10 +98,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   ),
                 ),
                 const Spacer(),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.notifications_none, color: Colors.black),
-                ),
+                // IconButton(
+                //   onPressed: () {},
+                //   icon: const Icon(Icons.notifications_none, color: Colors.black),
+                // ),
                 Builder(
                   builder: (context) => IconButton(
                     onPressed: () => Scaffold.of(context).openDrawer(),

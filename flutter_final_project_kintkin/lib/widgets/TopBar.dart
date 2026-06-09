@@ -24,10 +24,10 @@ class TopBar extends StatelessWidget {
               style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
             const Spacer(),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.notifications_outlined,color: Colors.black),
-            ),
+            // IconButton(
+            //   onPressed: () {},
+            //   icon: const Icon(Icons.notifications_outlined,color: Colors.black),
+            // ),
             IconButton(
               onPressed: () => Scaffold.of(context).openDrawer(),
               icon: const Icon(Icons.menu, color: Colors.black),
