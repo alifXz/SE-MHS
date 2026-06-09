@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_final_project_kintkin/Pages/edit_event_page.dart';
 import 'package:flutter_final_project_kintkin/models/event_model.dart';
 import 'package:flutter_final_project_kintkin/services/event_service.dart';
-import 'package:flutter_final_project_kintkin/AdminWidgets/admin_event_card.dart';
-
+import 'package:flutter_final_project_kintkin/widgets/basic_card.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ActiveEventsPage extends StatefulWidget {
   const ActiveEventsPage({super.key});
@@ -33,7 +33,52 @@ class _ActiveEventsPageState extends State<ActiveEventsPage> {
   }
 
   Future<void> _deleteEvent(EventModel event) async {
-    setState(() => _events.removeWhere((e) => e.id == event.id));
+    try {
+      await Supabase.instance.client
+          .from('events')
+          .delete()
+          .eq('id', event.id);
+
+      setState(() => _events.removeWhere((e) => e.id == event.id));
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${event.title} deleted')),
+      );
+    } catch (e) {
+      debugPrint('Error deleting event: $e');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to delete event')),
+      );
+    }
+  }
+
+  void _confirmDelete(EventModel event) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text('Delete Event'),
+        content: Text('Are you sure you want to delete "${event.title}"?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              _deleteEvent(event);
+            },
+            child: const Text(
+              'Delete',
+              style: TextStyle(color: Color(0xFF801A1A)),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _editEvent(EventModel event) async {
@@ -59,6 +104,47 @@ class _ActiveEventsPageState extends State<ActiveEventsPage> {
       ),
     );
     if (result == true) _loadEvents();
+  }
+
+  void _showActionSheet(EventModel event) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              event.title,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            ListTile(
+              leading: const Icon(Icons.edit, color: Color(0xFF1B4F6B)),
+              title: const Text('Edit Event'),
+              onTap: () {
+                Navigator.pop(ctx);
+                _editEvent(event);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete_outline, color: Color(0xFF801A1A)),
+              title: const Text(
+                'Delete Event',
+                style: TextStyle(color: Color(0xFF801A1A)),
+              ),
+              onTap: () {
+                Navigator.pop(ctx);
+                _confirmDelete(event);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -104,14 +190,19 @@ class _ActiveEventsPageState extends State<ActiveEventsPage> {
               : ListView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   itemCount: _events.length,
-                  itemBuilder: (context, index) => Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: AdminEventCard(
-                      event: _events[index],
-                      onDelete: () => _deleteEvent(_events[index]),
-                      onEdit: () => _editEvent(_events[index]),
-                    ),
-                  ),
+                  itemBuilder: (context, index) {
+                    final event = _events[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: SizedBox(
+                        height: 280,
+                        child: BasicCard(
+                          event: event,
+                          onTap: () => _showActionSheet(event),
+                        ),
+                      ),
+                    );
+                  },
                 ),
     );
   }

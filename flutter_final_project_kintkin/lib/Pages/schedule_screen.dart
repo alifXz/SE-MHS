@@ -27,7 +27,7 @@ class _CalendarState extends State<Calendar>{
   }
 
   Future<void> _loadEvents() async {
-    final events = await EventService().getEvents();
+    final events = await EventService().getUserEvents();
 
     if (!mounted) return;
 

@@ -34,9 +34,11 @@ class AdminService {
           .from('events')
           .select('price')
           .eq('id', registration['event_id'])
-          .single();
+          .maybeSingle();
 
-      revenue += (event['price'] as int?) ?? 0;
+      if (event != null) {
+        revenue += (event['price'] as int?) ?? 0;
+      }
     }
 
     return revenue;

@@ -68,7 +68,6 @@ class EventService {
 
     if (userId == null) return [];
 
-    // Step 1: get event IDs from registrations
     final regResponse = await Supabase.instance.client
         .from('registrations')
         .select('event_id')
@@ -80,12 +79,37 @@ class EventService {
         .map((row) => row['event_id'] as String)
         .toList();
 
-    // Step 2: fetch those events directly
     final eventResponse = await Supabase.instance.client
         .from('events')
         .select()
         .inFilter('id', eventIds)
         .lt('event_date', DateTime.now().toIso8601String());
+
+    return eventResponse
+        .map((row) => EventModel.fromJson(row))
+        .toList();
+  }
+
+  Future<List<EventModel>> getUserEvents() async {
+    final userId = Supabase.instance.client.auth.currentUser?.id;
+
+    if (userId == null) return [];
+
+    final regResponse = await Supabase.instance.client
+        .from('registrations')
+        .select('event_id')
+        .eq('user_id', userId);
+
+    if (regResponse.isEmpty) return [];
+
+    final eventIds = regResponse
+        .map((row) => row['event_id'] as String)
+        .toList();
+
+    final eventResponse = await Supabase.instance.client
+        .from('events')
+        .select()
+        .inFilter('id', eventIds);
 
     return eventResponse
         .map((row) => EventModel.fromJson(row))
