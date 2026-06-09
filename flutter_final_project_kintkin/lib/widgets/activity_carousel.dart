@@ -35,8 +35,8 @@ class _ActivityCarouselState extends State<ActivityCarousel> {
     final service = EventService();
 
     final result = AuthService.isAdmin
-        ? await service.getPastEvents()   // admin sees all past events
-        : await service.getUserHistory(); // user sees own history
+        ? await service.getPastEvents()
+        : await service.getUserHistory();
 
     if (!mounted) return;
 

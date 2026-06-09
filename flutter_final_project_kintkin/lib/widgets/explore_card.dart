@@ -12,37 +12,6 @@ class ExploreCard extends StatelessWidget {
     required this.event,
   });
 
-  Color _getCategoryColor() {
-    switch (event.category.toLowerCase()) {
-      case 'sports':
-        return const Color(0xFF801A1A);
-
-      case 'gaming':
-        return Colors.purple;
-
-      case 'music':
-        return Colors.orange;
-
-      case 'group activity':
-        return Colors.blue;
-
-      case 'board games':
-        return Colors.teal;
-
-      case 'cooking':
-        return Colors.deepOrange;
-
-      case 'art':
-        return Colors.pinkAccent;
-
-      case 'others':
-        return Colors.green;
-
-      default:
-        return const Color(0xFFD81B60);
-    }
-  }
-
   IconData _getCategoryIcon() {
     switch (event.category.toLowerCase()) {
       case 'sports':

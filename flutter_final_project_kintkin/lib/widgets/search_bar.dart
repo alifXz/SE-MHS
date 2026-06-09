@@ -22,21 +22,19 @@ class ExploreSearchBar extends StatelessWidget {
         ),
         child: TextField(
           controller: controller,
-          // This triggers every time the user types a letter
           onChanged: onSearch,
           style: const TextStyle(color: Colors.black87),
           decoration: InputDecoration(
-            hintText: 'Search events or communities...',
+            hintText: 'Search events...',
             hintStyle: const TextStyle(color: Colors.black54),
             prefixIcon: const Icon(Icons.search, color: Colors.grey),
-            // Show a clear button only if there's text
             suffixIcon: controller.text.isNotEmpty
                 ? IconButton(
                     icon: const Icon(Icons.clear, color: Colors.grey, size: 20),
                     onPressed: () {
                       controller.clear();
                       if (onClear != null) onClear!();
-                      onSearch(''); // Trigger an empty search to reset the list
+                      onSearch('');
                     },
                   )
                 : null,
