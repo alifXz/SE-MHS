@@ -31,13 +31,15 @@ class _MainScreenState extends State<MainScreen> {
 
   return Scaffold(
     body: IndexedStack(index: _currentIndex, children: pages),
-    bottomNavigationBar: Navbar(
-      selectedIndex: _currentIndex,
-      onTabTapped: (index) {
-        setState(() {
-          _currentIndex = index;
-        });
-      },
+    bottomNavigationBar: SafeArea(
+      child: Navbar(
+        selectedIndex: _currentIndex,
+        onTabTapped: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+      ),
     ),
   );
 }

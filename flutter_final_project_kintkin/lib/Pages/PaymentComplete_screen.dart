@@ -25,10 +25,13 @@ class _PaymentcompleteScreenState extends State<PaymentcompleteScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.check_circle_rounded, color: Colors.white, size: 300),
+              SizedBox(height: 100),
+              Icon(Icons.check_circle_rounded, color: Colors.white, size: 200),
+              SizedBox(height: 40),
               Text(
                 'Payment Successful',
-                style: TextStyle(color: Colors.white, fontSize: 50),
+                style: TextStyle(color: Colors.white, fontSize: 30),
+                textAlign: TextAlign.center
               ),
               Spacer(),
               Container(

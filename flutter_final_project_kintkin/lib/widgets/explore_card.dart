@@ -70,7 +70,7 @@ class ExploreCard extends StatelessWidget {
         children: [
           // Left Image
           Padding(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(5),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(14),
               child: SizedBox(
@@ -97,7 +97,7 @@ class ExploreCard extends StatelessWidget {
                       Row(
                         children: [
                           CircleAvatar(
-                            radius: 14,
+                            radius: 10,
                             backgroundColor: Color(0xFF4A90D9),
                             child: Icon(Icons.person, color: Colors.white, size: 16),
                           ),
@@ -105,7 +105,7 @@ class ExploreCard extends StatelessWidget {
                           Expanded(
                             child: Text(
                               event.organizer,
-                              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+                              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 11),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -121,7 +121,7 @@ class ExploreCard extends StatelessWidget {
                         children: [
                           Icon(Icons.location_on_outlined, size: 14, color: Colors.grey),
                           SizedBox(width: 4),
-                          Text(event.location, style: TextStyle(fontSize: 12, color: Colors.grey)),
+                          Flexible(child: Text(event.location, style: TextStyle(fontSize: 12, color: Colors.grey))),
                         ],
                       ),
                       SizedBox(height: 4),
